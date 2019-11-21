@@ -28,3 +28,36 @@ p, img, h1{
     width: 100%;
     text-align: right;
 }
+
+#head {
+    display: flex;
+    flex-direction: row;
+
+}
+
+ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: row;
+}
+
+li {
+    margin-right: 10px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    background: #FFF;
+}
+
+footer {
+    text-align: center;
+    margin-top: 10px;
+}
+
+#YoDawg {
+    text-align: center;
+}
