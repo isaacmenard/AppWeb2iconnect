@@ -1,24 +1,31 @@
+p{
+    color: white;
+}
+img{
+    height: 400px;
+    width: 400px;
+}
 body{
-    background-color: rgb(0, 255, 115);
+    background-color: rgb(30, 255, 0);
     margin: 0;
     padding: 0;
 }
-img{
-    width: 200px;
-    height: auto;
+
+.box1{
+    background-color: red;
+    width: 100%;
 }
-p{
-    text-align: center;
-    font-size: 20px;
+.p1,.p2,.p3,.p4{
+    display: inline-block;
+    margin: 20px;;
 }
-.pasCentre{
-    text-align: left;
+.rigth{
+    display: inline-block;
+    position: absolute;
+    right: 0;
 }
-div{
-    border: 1px solid;
-    background-color: blue;
-    color:white;
-    width: 200px;
-    padding: 5px;
-    margin-bottom: 5px;
+.box2{
+    width: 50%;
+    height: 50%;
+    background-color: rgb(4, 0, 255);
 }
