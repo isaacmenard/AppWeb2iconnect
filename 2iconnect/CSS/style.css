@@ -138,9 +138,14 @@ ul, ol {
 /* --  background section  -- */
 
 .bg-grey {
+<<<<<<< HEAD
     background-color: #FAFAFA;
     border-top: 1px solid #EEE;
     border-bottom: 1px solid #EEE;
+=======
+    background-color: #FAFAFA ;
+
+>>>>>>> 11f54f36bd936412588b95883ba4933f2bdec0a3
 }
 
 .bg-dark {
