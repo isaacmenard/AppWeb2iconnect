@@ -9,7 +9,7 @@ body {
     font-size: 16px;
     line-height: 1.6;
     overflow-x: hidden;
-    color:#ffffff;
+    color:#1C1D21;
 	background-color: #262626;
 
 }
@@ -109,12 +109,12 @@ ul, ol {
 /* --  background section  -- */
 
 .bg-grey {
-    background-color: #FAFAFA ;
+    background-color: #FFFFFF ;
 
 }
 
 .bg-dark {
-    background-color: #1C1D21;
+    background-color: #FFFFFF;
 }
 
 
