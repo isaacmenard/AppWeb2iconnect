@@ -1,33 +1,71 @@
+/*
+Theme Name:
+Author: yaminncco
 
+Colors:
+	Body 		  : #868F9B
+	Headers 	: #10161A
+	Primary 	: #6195FF
+	Dark      : #FCFCFF
+	Grey 		  : #F4F4F4 #FAFAFA #EEE
+
+Fonts: Montserrat Varela Round
+
+Table OF Contents
+------------------------------------
+1 > General
+2 > Logo
+3 > Navigation
+4 > Header
+5 > About
+6 > Portfolio
+7 > Services
+8 >  Why choose us
+9 >  Numbers
+10 > Pricing
+11 > Testimonial
+12 > Team
+13 > Blog
+14 > Blog post
+15 > Blog sidebar
+16 > Contact
+17 > Footer
+18 > Responsive
+19 > Owl theme
+20 > Back to top
+21 > Preloader
+
+------------------------------------*/
 
 /*------------------------------------*\
 	General
 \*------------------------------------*/
+
+
+/* -- typography -- */
 
 body {
     font-family: 'Varela Round', sans-serif;
     font-size: 16px;
     line-height: 1.6;
     overflow-x: hidden;
-    color:#ffffff;
+<<<<<<< HEAD
+    color:#1C1D21;
 	background-color: #262626;
 
+=======
+    color: #868F9B;
+>>>>>>> 141e830b6c4b410a4d0e4c2008665f2814643521
 }
 
- h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6 {
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     margin-top: 0px;
     margin-bottom: 20px;
-    color: #7D7776;
+    color: #10161A;
 }
-h1 {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    margin-top: 0px;
-    margin-bottom: 20px;
-    color: #6195FF;
-}
+
 h1 {
     font-size: 54px;
 }
@@ -49,8 +87,7 @@ h5 {
 }
 
 a {
-	 color: #FFFFFF;
-
+    color: #6195FF;
     text-decoration: none;
     -webkit-transition: 0.2s opacity;
     transition: 0.2s opacity;
@@ -60,11 +97,11 @@ a:hover, a:focus {
     text-decoration: none;
     outline: none;
     opacity: 0.8;
-   color: #6195FF;
+    color: #6195FF;
 }
 
 .main-color {
-	 color: #6195FF;
+    color: #6195FF;
 }
 
 .white-text {
@@ -72,14 +109,12 @@ a:hover, a:focus {
 }
 
 ::-moz-selection {
-    background-color: #262626;
-	 color: #6195FF;
+    background-color: #6195FF;
     color: #FFF;
 }
 
 ::selection {
-	 background-color: #6195FF;
-
+    background-color: #6195FF;
     color: #FFF;
 }
 
@@ -109,12 +144,22 @@ ul, ol {
 /* --  background section  -- */
 
 .bg-grey {
-    background-color: #25272C ;
+<<<<<<< HEAD
+    background-color: #FFFFFF ;
+=======
+<<<<<<< HEAD
+    background-color: #FAFAFA;
+    border-top: 1px solid #EEE;
+    border-bottom: 1px solid #EEE;
+=======
+    background-color: #FAFAFA ;
+>>>>>>> 141e830b6c4b410a4d0e4c2008665f2814643521
 
+>>>>>>> 11f54f36bd936412588b95883ba4933f2bdec0a3
 }
 
 .bg-dark {
-    background-color: #1C1D21;
+    background-color: #FFFFFF;
 }
 
 
@@ -159,7 +204,7 @@ ul, ol {
   	display:block;
   	height:4px;
   	width:40px;
-	background-color: #6195FF;
+  	background-color: #6195FF;
     margin-top: 20px;
 }
 
@@ -167,7 +212,31 @@ ul, ol {
     margin: 20px auto 0px;
 }
 
+/* --  Input  -- */
 
+input[type="text"], input[type="email"], input[type="password"], input[type="number"], input[type="date"], input[type="url"], input[type="tel"], textarea {
+    height: 40px;
+    width: 100%;
+    border: none;
+	  background: #F4F4F4;
+    border-bottom: 2px solid #EEE;
+    color: #354052;
+    padding: 0px 10px;
+    opacity: 0.5;
+    -webkit-transition: 0.2s border-color, 0.2s opacity;
+    transition: 0.2s border-color, 0.2s opacity;
+}
+
+textarea {
+    padding: 10px 10px;
+    min-height: 80px;
+    resize: vertical;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="number"]:focus, input[type="date"]:focus, input[type="url"]:focus, input[type="tel"]:focus, textarea:focus {
+    border-color: #6195FF;
+    opacity: 1;
+}
 
 /* --  Buttons  -- */
 
@@ -182,7 +251,7 @@ ul, ol {
 }
 
 .main-btn {
-   background: #6195FF;
+    background: #6195FF;
     color: #FFF;
 }
 
@@ -195,7 +264,6 @@ ul, ol {
     background: transparent;
     color: #6195FF !important;
     border-color: #6195FF;
-
 }
 
 .main-btn:hover, .white-btn:hover, .outline-btn:hover {
@@ -244,7 +312,7 @@ ul, ol {
 
 #nav {
     padding: 10px 0px;
-    background: #262626;
+    background: #FFF;
     -webkit-transition: 0.2s padding;
     transition: 0.2s padding;
     z-index: 999;
@@ -282,7 +350,7 @@ ul, ol {
         transition: 0.2s color;
     }
     .main-nav>li>a {
-        color: #10161A;	
+        color: #10161A;
         padding: 15px 0px;
     }
     #nav.nav-transparent:not(.fixed-nav) .main-nav>li>a {
@@ -291,13 +359,11 @@ ul, ol {
     .main-nav>li>a:hover, .main-nav>li>a:focus, .main-nav>li.active>a {
         background: transparent;
         color: #6195FF;
-	
     }
     .main-nav>li>a:after {
         content: "";
         display: block;
         background-color: #6195FF;
-
         height: 2px;
         width: 0%;
         -webkit-transition: 0.2s width;
@@ -326,7 +392,7 @@ ul, ol {
         position: absolute;
         right: -50%;
         top: 0;
-       background-color: #6195FF;
+        background-color: #6195FF;
         width: 200px;
         -webkit-box-shadow: 0px 5px 5px -5px rgba(53, 64, 82, 0.2);
         box-shadow: 0px 5px 5px -5px rgba(53, 64, 82, 0.2);
@@ -414,7 +480,6 @@ ul, ol {
         transition: 0.2s all;
     }
     .main-nav>li.active {
-
         border-left: 6px solid #6195FF;
     }
     .main-nav li a:hover, .main-nav li a:focus {
@@ -688,8 +753,7 @@ header {
     -ms-transform: translateY(100%);
     transform: translateY(100%);
     opacity: 0;
-
-   color: #6195FF;
+    color: #6195FF;
     margin-bottom: 5px;
     -webkit-transition: 0.2s all;
     transition: 0.2s all;
@@ -790,7 +854,6 @@ header {
     border-radius: 50%;
     color: #6195FF;
     border: 1px solid #6195FF;
-
     margin-right: 5px;
 }
 
@@ -873,7 +936,6 @@ header {
     border: 2px solid #6195FF;
 }
 
-
 .pricing .price h3 {
   font-size: 42px;
   margin: 0px;
@@ -941,7 +1003,6 @@ header {
 
 .testimonial span {
     font-size: 14px;
-
     color: #6195FF;
     text-transform: uppercase;
 }
@@ -953,7 +1014,7 @@ header {
 
 .team {
     position: relative;
-    background-color: #575554;
+    background-color: #F4F4F4;
     padding: 40px 20px;
     margin: 15px 0px;
 }
@@ -1114,7 +1175,6 @@ header {
 
 .blog-tags a:hover {
   color: #FFF;
-
   background-color: #6195FF;
 }
 
@@ -1168,7 +1228,7 @@ header {
     border-radius: 3px;
     margin-left: 5px;
     color: #FFF;
-   background-color: #6195FF;
+    background-color: #6195FF;
 }
 
 /* -- blog comments -- */
@@ -1222,11 +1282,9 @@ header {
 .blog-comments .media.author {
     background-color: #F4F4F4;
     border-color: #6195FF;
-
     border-bottom: 1px solid #6195FF;
 }
 .blog-comments .media.author>.media-body>.media-heading {
-
     color: #6195FF;
 }
 
@@ -1309,7 +1367,6 @@ header {
 
 .widget-category a:hover {
     color: #6195FF;
-
 }
 
 /* -- tags sidebar -- */
@@ -1358,14 +1415,12 @@ header {
 .widget-post .blog-meta li {
     display: inline-block;
     margin-right: 5px;
-
     color: #6195FF;
     font-size: 12px;
 }
 
 .widget-post li i {
     color: #6195FF;
-
     margin-right: 5px;
 }
 
@@ -1385,9 +1440,7 @@ header {
     color: #6195FF;
     margin-bottom: 20px;
 }
-.contact background-color{
-	color: #FCFCFF;
-}
+
 .contact-form {
     text-align: center;
     margin-top: 40px;
@@ -1548,11 +1601,9 @@ header {
 }
 
 .owl-theme .owl-dots .owl-dot:hover span {
-
     background: #6195FF;
 }
 .owl-theme .owl-dots .owl-dot.active span {
-
 	  background: #6195FF;
 	  width:20px;
 }
@@ -1595,7 +1646,7 @@ header {
 
 .owl-theme .owl-nav [class*='owl-']:hover {
     opacity: 0.8;
-   background: #6195FF;
+    background: #6195FF;
 }
 
 
@@ -1612,7 +1663,7 @@ header {
   	height: 50px;
   	line-height: 50px;
   	text-align: center;
-    background: #6195FF;
+  	background: #6195FF;
   	border-radius:3px;
   	color: #FFF;
   	z-index: 9999;
@@ -1655,7 +1706,7 @@ header {
 }
 .preloader span {
     display: inline-block;
-   background-color: #6195FF;
+    background-color: #6195FF;
     width: 25px;
     height: 25px;
     -webkit-animation: 1s preload ease-in-out infinite;
