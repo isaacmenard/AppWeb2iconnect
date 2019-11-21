@@ -1,0 +1,49 @@
+html{
+    color: white;
+}
+
+p{
+    color: yellow;
+}
+
+img{
+    width: 200px;
+}
+
+body{
+    background-color: black;
+}
+
+h2{
+    text-align: center;;
+}
+
+div{
+    
+    background-color: teal;
+}
+
+.box1{
+    background-color: chocolate;
+    height: 30px;
+    margin-left: 0;
+    
+}
+
+.box2{
+    background-color: tomato;
+    position: absolute;
+    left: 0;
+    margin-left: 50px;
+}
+
+.box3{
+    background-color: tomato;
+    position: absolute;
+    right: 0;
+    margin-right: 50px;
+}
+
+body{
+    margin: 0px;
+  }
