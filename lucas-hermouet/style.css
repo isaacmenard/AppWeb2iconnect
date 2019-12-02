@@ -33,7 +33,7 @@ p, img, h1{
 #head {
     display: flex;
     flex-direction: row;
-    background-image: url("Images/datterex.jpg");
+    background-image: url("terex.jpg");
     background-size: 100%;
     padding-bottom: 110px;
 }
@@ -75,4 +75,9 @@ body{
 
 #AAA p {
     color : #ff33c4;
+}
+.Yooooshi {
+    
+    text-align: center;
+    margin-bottom: 10%;
 }
