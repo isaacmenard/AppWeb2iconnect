@@ -6,8 +6,12 @@
   <link rel="stylesheet" href="style.css">
   <script src="script.js"></script>
     </head>
-
-<body>
+<script>
+function loop{
+  document.getElementById('musique').setAttribute('play');
+}
+</script>
+<body onload="loop()">
   <header id = "head">
     <div id="AAA">
       <p>Lien qui le prouve:</p>
@@ -33,7 +37,7 @@
       <a href="https://www.bitchute.com/video/6RUWSWpzlSZI/">cliquez içi pour une photo de chat trop mignon (hallal certifié)</a>
       
     </footer>
-    <audio class="Yooooshi" autoplay loop>
+    <audio class="Yooooshi" autoplay loop id="musique">
       <source src="Yoshis Island OST - Flower Garden.ogg" type="audio/ogg" volume="80">
       </audio>
     
