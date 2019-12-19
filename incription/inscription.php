@@ -35,12 +35,13 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
         $errors['login'] = "login est absent";
     }
     if (array_key_exists('mail', $_POST)) {
+        
             $stmt = $bdd->prepare('SELECT 1 FROM membres WHERE mail = :mail');
             $stmt->execute(['mail' => $_POST['mail']]);
             if (FALSE !== $stmt->fetchColumn()) {
                 $errors['mail'] = "Ce mail est d�j� utilis�";
             }
-        
+            
     } else {
         $errors['mail'] = "mail est absent";
     }
@@ -86,55 +87,58 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-12">
-<?php
-if ($errors) {
-    echo '<div class="box"><span class="botton1 bottonError1">Veuillez corriger les erreurs ci-dessous afin de finaliser votre inscription :</span><span class="botton2 bottonError"><ul><li>', implode('</li><li>', $errors), '</li></ul></span></div>';
-}
-?>
-                    <form class="form-horizontal" method="post" action="">
-                            <div class="box <?php if (array_key_exists('login', $errors)) echo 'has-error'; ?>">
-                                <label for="login">Pseudo :</label>
-                                <span>
-                                    <input type="text" id="login" name="login" value="<?php if (array_key_exists('login', $_POST)) echo htmlspecialchars($_POST['login']); ?>" />
-                                </span>
-                            </div>
-                            <div class="box <?php if (array_key_exists('mail', $errors)) echo 'has-error'; ?>">
-                                <label for="login">mail :</label>
-                                <span>
-                                    <input type="text" id="mail" name="mail" value="<?php if (array_key_exists('mail', $_POST)) echo htmlspecialchars($_POST['mail']); ?>" />
-                                </span>
-                            </div>
-                            <div class="box <?php if (array_key_exists('mdp', $errors) || array_key_exists('mdpconfirm', $errors)) echo 'has-error'; ?>">
-                                <label for="mdp">Mot de passe :</label>
-                                <span>
-                                    <input type="password" id="mdp" name="mdp"  value="" />
-                                </span>
-                            </div>
-                            <div class="box <?php if (array_key_exists('mdpconfirm', $errors)) echo 'has-error'; ?>">
-                                <label for="mdpconfirm">Confirmation du mot de passe :</label>
-                                <span>
-                                    <input type="password" id="mdpconfirm" name="mdpconfirm" value="" />
-                                </span>
-                            </div>
-                            <div class="box">   
-                                <span class="bottonVal">                     
-                                    <input type="submit" class="botton2" />
-                                </span>
-                            </div>
-                    </form>
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    
+    <br>
+<br>
+<div class="sign-up-modal">
+		<div id="close-modal-button">
+		</div>
+
+		<div class="logo-container">
+        <?php
+            if ($errors) {
+                echo '<div class="box"><span class="botton1 bottonError1">Veuillez corriger les erreurs ci-dessous afin de finaliser votre inscription :</span><span class="botton2 bottonError"><ul><li>', implode('</li><li>', $errors), '</li></ul></span></div>';
+            }
+        ?>
+		</div>
+
+		<form class="details" id="form" method="POST">
+				<div class="input-container">
+                    <input class="col-sm-5 username-input with-placeholder" type="text" id="login" name="login" placeholder="pseudo" value="<?php if (array_key_exists('login', $_POST)) echo htmlspecialchars($_POST['login']); ?>" required/>
                 </div>
-            </div>
-        </div>
-    </body>
+                <div class="input-container">
+                    <input class="col-sm-5 username-input with-placeholder" type="text" id="mail" name="mail" placeholder="Mail" value="<?php if (array_key_exists('mail', $_POST)) echo htmlspecialchars($_POST['mail']); ?>" required/>
+                </div>
+                
+				<div class="input-container">
+						<input class="col-sm-5 username-input with-placeholder" name="mdp" id="mdp" type="password" placeholder="Password" required/>
+                </div>
+                <div class="input-container">
+						<input class="col-sm-5  username-input with-placeholder" name="mdpconfirm" id="mdpconfirm" type="password" placeholder="Confirm Password" required/>
+				</div>
+
+				<div class="col-sm-12 form-checkbox">
+						<label>
+								<input type="checkbox" value="true"> Keep me signed in</label>
+				</div>
+
+				<input id="submit" type="submit" value="Incription !">
+
+				<p>Vous avez déjà un compte ? <a href="Connexion">Connexion</a></p>
+
+		</form>
+</div>
+</body>
+
 </html>

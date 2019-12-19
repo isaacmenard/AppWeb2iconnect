@@ -44,38 +44,41 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-12">
-                <?php
-if ($fail) {
-    echo '<div class="box"><span class="botton2  bottonError1">Aucun utilisateur ne correspond à ce couple login/mot de passe.</span></div>';
-}
-?>
-                <form class="form-horizontal" method="POST">
-                    <div class="box">
-                        <label for="login">Pseudo</label>
-                        <span>
-                            <input type="text" id="login" name="login">
-                        </span>
-                    </div>
-                    <div class="box">
-                        <label for="password">Mot de passe</label>
-                        <span>
-                            <input type="password" id="password" name="password">
-                        </span>
-                    </div>
-                    <br>
-                    <div class="box">
-                        <button class="botton1" type="submit">Se connecter</button>
-                        <a class="botton2" href="inscription.php">
-                            <div>S'inscrire</div>
-                        </a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    
+    <br>
+<br>
+<div class="sign-up-modal">
+		<div id="close-modal-button">
+		</div>
+
+		<div class="logo-container">
+        <?php
+            if ($fail) {
+                echo '<div class="box"><span class="botton2  bottonError1">Aucun utilisateur ne correspond à ce couple login/mot de passe.</span></div>';
+            }
+        ?>
+		</div>
+
+		<form class="details" id="form" method="POST">
+				<div class="input-container">
+						<input class="col-sm-5 username-input with-placeholder" id="login" name="login" type="text" placeholder="Pseudo" required/>
+				</div>
+				<div class="input-container">
+						<input class="col-sm-5 col-sm-push-2 password-input with-placeholder" name="password" id="password" type="password" placeholder="Password" required/>
+				</div>
+
+				<div class="col-sm-12 form-checkbox">
+						<label>
+								<input type="checkbox" value="true"> Keep me signed in</label>
+				</div>
+
+				<input id="submit" type="submit" value="Connexion !">
+
+				<p>Vous n'avez pas de compte ? <a href="inscription">Inscription</a></p>
+
+		</form>
+</div>
 </body>
 
 </html>
+
