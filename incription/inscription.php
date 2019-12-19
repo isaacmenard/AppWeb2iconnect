@@ -19,21 +19,6 @@ $errors = [];
 mb_internal_encoding('UTF-8');
 if ('POST' == $_SERVER['REQUEST_METHOD']) {
 
-
-    if (array_key_exists('login', $_POST)) {
-        $login_length = mb_strlen($_POST['login']);
-        if ($login_length < MIN_PSEUDO_LEN || $login_length > MAX_PSEUDO_LEN) {
-            $errors['login'] = sprintf("La longueur du login doit �tre comprise entre %d et %d caract�res", MIN_PSEUDO_LEN, MAX_PSEUDO_LEN);
-        } else {
-            $stmt = $bdd->prepare('SELECT 1 FROM membres WHERE login = :login');
-            $stmt->execute(['login' => $_POST['login']]);
-            if (FALSE !== $stmt->fetchColumn()) {
-                $errors['login'] = "Ce pseudonyme est d�j� utilis�";
-            }
-        }
-    } else {
-        $errors['login'] = "login est absent";
-    }
     if (array_key_exists('mail', $_POST)) {
         
             $stmt = $bdd->prepare('SELECT 1 FROM membres WHERE mail = :mail');
@@ -58,13 +43,13 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
     }
 
     if (!$errors) {
-        $insert = $bdd->prepare('INSERT INTO membres(login, mail,mot_de_passe) VALUES(:login,:mail, :mdp)');
-        $insert->execute(['login' => $_POST['login'], 'mail' => $_POST['mail'],  'mdp' => password_hash($_POST['mdp'], $password_options['algo'], $password_options['options'])]);
+        $insert = $bdd->prepare('INSERT INTO membres( mail,mot_de_passe) VALUES(:mail, :mdp)');
+        $insert->execute([ 'mail' => $_POST['mail'],  'mdp' => password_hash($_POST['mdp'], $password_options['algo'], $password_options['options'])]);
        $fail = FALSE;
 if ('POST' == $_SERVER['REQUEST_METHOD']) {
 
-    $stmt = $bdd->prepare('SELECT * FROM membres WHERE login = :login');
-    $stmt->execute(['login' => $_POST['login']]);
+    $stmt = $bdd->prepare('SELECT * FROM membres WHERE mail = :mail');
+    $stmt->execute(['mail' => $_POST['mail']]);
     if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         if (password_verify($_POST['mdp'], $row['mot_de_passe'])) {
             $_SESSION['id'] = $row['id'];
@@ -114,12 +99,11 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 		</div>
 
 		<form class="details" id="form" method="POST">
-				<div class="input-container">
-                    <input class="col-sm-5 username-input with-placeholder" type="text" id="login" name="login" placeholder="pseudo" value="<?php if (array_key_exists('login', $_POST)) echo htmlspecialchars($_POST['login']); ?>" required/>
+				<div class="input-container mail">
+                    <input class="col-sm-5 username-input with-placeholder noBorder" type="text" id="mail" name="mail" placeholder="Mail" value="<?php if (array_key_exists('mail', $_POST)) echo htmlspecialchars($_POST['mail']); ?>" required/>
+                    <div class="noBorder lp2i">@lp2i-poitiers.fr</div>
                 </div>
-                <div class="input-container">
-                    <input class="col-sm-5 username-input with-placeholder" type="text" id="mail" name="mail" placeholder="Mail" value="<?php if (array_key_exists('mail', $_POST)) echo htmlspecialchars($_POST['mail']); ?>" required/>
-                </div>
+
                 
 				<div class="input-container">
 						<input class="col-sm-5 username-input with-placeholder" name="mdp" id="mdp" type="password" placeholder="Password" required/>
@@ -133,7 +117,7 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 								<input type="checkbox" value="true"> Keep me signed in</label>
 				</div>
 
-				<input id="submit" type="submit" value="Incription !">
+				<input id="submit" type="submit" value="Inscription !">
 
 				<p>Vous avez déjà un compte ? <a href="Connexion">Connexion</a></p>
 

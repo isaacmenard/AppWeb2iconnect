@@ -13,8 +13,8 @@ if (isset($_SESSION['id'])) {
 $fail = FALSE;
 if ('POST' == $_SERVER['REQUEST_METHOD']) {
 
-    $stmt = $bdd->prepare('SELECT * FROM membres WHERE login = :login');
-    $stmt->execute(['login' => $_POST['login']]);
+    $stmt = $bdd->prepare('SELECT * FROM membres WHERE mail = :mail');
+    $stmt->execute(['mail' => $_POST['mail']]);
     if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         if (password_verify($_POST['password'], $row['mot_de_passe'])) {
             $_SESSION['id'] = $row['id'];
@@ -60,17 +60,18 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 		</div>
 
 		<form class="details" id="form" method="POST">
-				<div class="input-container">
-						<input class="col-sm-5 username-input with-placeholder" id="login" name="login" type="text" placeholder="Pseudo" required/>
-				</div>
+        <div class="input-container mail">
+                    <input class="col-sm-5 username-input with-placeholder noBorder" type="text" id="mail" name="mail" placeholder="Mail" value="<?php if (array_key_exists('mail', $_POST)) echo htmlspecialchars($_POST['mail']); ?>" required/>
+                    <div class="noBorder lp2i">@lp2i-poitiers.fr</div>
+                </div>
 				<div class="input-container">
 						<input class="col-sm-5 col-sm-push-2 password-input with-placeholder" name="password" id="password" type="password" placeholder="Password" required/>
 				</div>
-
+<!-- 
 				<div class="col-sm-12 form-checkbox">
 						<label>
 								<input type="checkbox" value="true"> Keep me signed in</label>
-				</div>
+				</div> -->
 
 				<input id="submit" type="submit" value="Connexion !">
 
