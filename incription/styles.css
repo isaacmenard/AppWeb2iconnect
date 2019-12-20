@@ -2,8 +2,14 @@
 
 body {
 	background-color: #333;
+	color: white;
 }
-
+footer{
+	text-align:center;
+	background-color:black;
+	border-top:solid 2px;
+	padding:10px;
+}
 .sign-up-modal p,
 .sign-up-modal .form-checkbox label {
 	font-size: 1em;

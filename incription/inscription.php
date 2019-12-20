@@ -4,7 +4,6 @@ include("include.php");
 ?>
 <link rel="stylesheet" href="styles.css">
 <?php
-session_start();
 if (isset($_SESSION['id'])) {
     header('Location: accueil.php');
     exit;
@@ -57,8 +56,8 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
                 $stmt = $bdd->prepare('UPDATE membres SET mot_de_passe = :new_hash WHERE id = :id');
                 $stmt->execute(['id' => $row['id'], 'new_hash' => password_hash($_POST['password'], $password_options['algo'], $password_options['options'])]);
             }
-            header('Location: 2iconnect');
-            echo "<script>window.location.replace('2iconnect');</script><p>connexion</p>";
+            header('Location: accueil.php');
+            echo "<script>window.location.replace('accueil.php');</script><p>connexion</p>";
             exit;
         } else {
             $fail = TRUE;

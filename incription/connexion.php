@@ -2,13 +2,9 @@
 session_start();
 $_SESSION = array();
 session_destroy();
-
 session_start();
 include("include.php");
-if (isset($_SESSION['id'])) {
-    header('Location: index.php');
-    exit;
-}
+
 
 $fail = FALSE;
 if ('POST' == $_SERVER['REQUEST_METHOD']) {
@@ -22,8 +18,7 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
                 $stmt = $bdd->prepare('UPDATE membres SET mot_de_passe = :new_hash WHERE id = :id');
                 $stmt->execute(['id' => $row['id'], 'new_hash' => password_hash($_POST['password'], $password_options['algo'], $password_options['options'])]);
             }
-            header('Location: 2iconnect');
-            echo "<script>window.location.replace('2iconnect');</script><p>connexion</p>";
+            header('Location: accueil.php');
             exit;
         } else {
             $fail = TRUE;
