@@ -8,7 +8,7 @@ if (isset($_SESSION['id'])) {
     header('Location: accueil.php');
     exit;
 }
-
+session_start();
 const MIN_PSEUDO_LEN = 3;
 const MAX_PSEUDO_LEN = 80;
 const MIN_PASSWORD_LEN = 6;

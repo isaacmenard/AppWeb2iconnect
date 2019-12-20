@@ -4,12 +4,44 @@ body {
 	background-color: #333;
 	color: white;
 }
+.smallInput{
+	width: 400px !important;
+	font-size: 1em !important;
+  }
 footer{
 	text-align:center;
 	background-color:black;
 	border-top:solid 2px;
 	padding:10px;
+	margin-top: 100px;
 }
+header{
+	text-align:center;
+	background-color:black;
+	border-bottom:solid 2px;
+	padding:10px;
+	margin-bottom: 100px;
+}
+
+
+.avatar1 {
+    width: 180px;
+    height: 180px;
+    background-size: cover;
+    border: solid white;
+    border-radius: 3px 3px 2px;
+    background-position: center;
+}
+.avatar1 img{
+    display: none;
+}
+
+.conteneurprofil {
+    padding: 10px;
+    width: auto;
+    height: auto;
+}
+
 .sign-up-modal p,
 .sign-up-modal .form-checkbox label {
 	font-size: 1em;
