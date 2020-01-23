@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<select id="select1" onchange="app_sel(this.value);" name="Sections">
+<option value="1">Seconde</option>
+<option value="2">Première</option>
+<option value="3">Terminale</option>
+<option value="4">BTS</option>
+</optgroup>
+</select>
+
+<span id="select2">
+<select id="select21" style="display:inline;">
+<option value="1">Seconde A</option>
+<option value="2">Seconde B</option>
+<option value="3">Seconde C</option>
+<option value="4">Seconde D</option>
+<option value="5">Seconde E</option>
+<option value="6">Seconde F</option>
+</select>
+
+<select id="select22" style="display:none;">
+<optgroup label="Classe">
+<option value="7">Première A</option>
+<option value="8">Première B</option>
+<option value="9">Première C</option>
+<option value="10">Première D</option>
+<option value="11">Première E</option>
+<option value="12">Première F</option></optgroup>
+</select>
+
+<select id="select23" style="display:none;">
+<optgroup label="Classe">
+<option value="13">Terminale TS1</option>
+<option value="14">Terminale TS2</option>
+<option value="15">Terminale TS3</option>
+<option value="16">Terminale ES1</option>
+<option value="17">Terminale ES2</option>
+<option value="18">Terminale L</option></optgroup>
+</select>
+
+<select id="select24" style="display:none;">
+<optgroup label="Classe">
+<option value="19">BTS SNIR1</option>
+<option value="20">BTS SNIR2</option>
+<option value="21">BTS CIRA1</option>
+<option value="22">BTS CIRA2</option>
+</optgroup>
+</select>
+</span>
+
+<script type="text/javascript">
+function app_sel(valeur) { // Le param valeur servira à savoir quel select afficher
+ var sels = document.getElementById("select2").getElementsByTagName("select"); // On récupère tous les selects dans le span id="select2"
+ for(var i=0,l=sels.length;i<l;i++) { // Et on les cache tous
+  sels[i].style.display = "none";
+ }
+ document.getElementById("select2"+valeur).style.display = "inline"; // pour n'afficher finalement que celui qu'on veut.
+}
+</script>
+</body>
+</html>
