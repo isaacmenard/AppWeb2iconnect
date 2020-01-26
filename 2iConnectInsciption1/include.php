@@ -9,7 +9,7 @@ $password_options = [ 'algo' => PASSWORD_DEFAULT, 'options' => [ 'cost' => 12 ] 
 
 try
 {
-$bdd = new PDO('mysql:host=localhost;dbname=espace_membre', 'root', '');
+$bdd = new PDO('mysql:host=localhost;dbname=2iconnect', 'root', '');
 $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 }
 catch (Exception $e)

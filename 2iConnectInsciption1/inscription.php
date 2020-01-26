@@ -30,6 +30,13 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 	} else {
 		$errors['mail'] = "mail est absent";
 	}
+	
+    if (!array_key_exists('prenom', $_POST)) {
+		$errors['prenom'] = "Prénom est absent";
+	}
+	if (!array_key_exists('nom', $_POST)) {
+		$errors['nom'] = "Nom est absent";
+	}
 	if(array_key_exists('mdp', $_POST)){
 		$mdp_length = mb_strlen($_POST['mdp']);
 		if ($mdp_length < MIN_PASSWORD_LEN){
@@ -43,8 +50,8 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
     }
 
     if (!$errors) {
-        $insert = $bdd->prepare('INSERT INTO membres( mail,mot_de_passe) VALUES(:mail, :mdp)');
-        $insert->execute([ 'mail' => $_POST['mail'],  'mdp' => password_hash($_POST['mdp'], $password_options['algo'], $password_options['options'])]);
+        $insert = $bdd->prepare('INSERT INTO membres( mail,mot_de_passe,nom,prenom) VALUES(:mail, :mdp,:nom,:prenom)');
+        $insert->execute([ 'mail' => $_POST['mail'],  'mdp' => password_hash($_POST['mdp'], $password_options['algo'], $password_options['options']),'nom' => $_POST['nom'],'prenom' => $_POST['prenom']]);
        $fail = FALSE;
 if ('POST' == $_SERVER['REQUEST_METHOD']) {
 
@@ -71,84 +78,7 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
     }
 }
 ?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr" dir="ltr">
-<head>
-	<link rel="icon" href="logo.ico" />
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>2iConnect - Inscription</title>
-		<meta name="description" content="Pour accéder à la platforme de signalisation">
-	<meta content=">> 2iConnect <<" property="og:title">	
-	<link href="#" rel="canonical">
- 
-	<meta content="2iConnect est une application lycéenne pour simpliefier la vie au lycée" property="og:description">
-	<meta content="#" property="og:url">
-	<meta content="2iConnect" property="og:site_name">
-	<meta content="website" property="og:type">
-	<meta content="" property="og:image">
-	<!-- Google font -->
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CVarela+Round" rel="stylesheet">
-
-	<!-- Bootstrap -->
-	<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
-
-	<!-- Owl Carousel -->
-	<link href="css/owl.carousel.css" rel="stylesheet" type="text/css">
-	<link href="css/owl.theme.default.css" rel="stylesheet" type="text/css">
-
-	<!-- Magnific Popup -->
-	<link href="css/magnific-popup.css" rel="stylesheet" type="text/css">
-
-	<!-- Font Awesome Icon -->
-	<link href="css/font-awesome.min.css" rel="stylesheet">
-
-	<!-- Custom stlylesheet -->
-	<link href="css/style.css" rel="stylesheet" type="text/css">
-</head>
-<body>
-	<!-- Header -->
-	<header id="inscription.html">
-		<!-- Background Image -->
-		<div class="bg-img" style="background-image: url('./img/background1.jpg');">
-			<div class="overlay"></div>
-		</div>
-		<!-- /Background Image -->
-
-		<!-- Nav -->
-		<nav id="nav" class="navbar nav-transparent">	
-			<div class="container">
-
-				<div class="navbar-header">
-					<!-- Logo -->
-					<div class="navbar-brand">
-						<a href="index.php">
-							<img class="logo" src="img/logo.png" alt="logo">
-							<img class="logo-alt" src="img/logo.png" alt="logo"	>
-							
-						</a>
-						
-					</div>
-					<!-- /Logo -->
-
-					<!-- Collapse nav button -->
-					<div class="nav-collapse">
-						<span></span>
-					</div>
-					<!-- /Collapse nav button -->
-				</div>
-
-				<!--  Main navigation  -->
-				<ul class="main-nav nav navbar-nav navbar-right">
-					<li><a href="index.php">Accueil</a></li>
-					<li><a href="Infos.php">Infos</a></li>
-					<li><a href="Contact.php">Contact</a></li>
-					<li><a href="#espace_de_connexion_inscription.php">Espace Membre</a>
-				</ul>
-			</div>
-		</nav>
-	</header>
+<?php include('header.php') ?>
 		<div class="home-wrapper">
 			<div class="container">
 				<div class="row">
@@ -187,6 +117,12 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 		<input name="Hidden1" type="hidden" />
 		<input class="nouveauStyle1" type="email" id="mail" name="mail" placeholder="Mail" pattern=".+@lp2i-poitiers.fr" required style="width:300px" value="<?php if (array_key_exists('mail', $_POST)) echo htmlspecialchars($_POST['mail']); ?>" required/></div>
 	<h2></h2>
+		<div><h4 class="auto-style1">Prénom - Nom</h4>
+	<div class="auto-style1">
+		<input name="Hidden1" type="hidden" />
+		<input class="nouveauStyle1" type="text" id="prenom" name="prenom" placeholder="Prénom"  required style="width:300px" value="<?php if (array_key_exists('prenom', $_POST)) echo htmlspecialchars($_POST['prenom']); ?>" required/></div>
+			<input class="nouveauStyle1" type="text" id="nom" name="nom" placeholder="Nom"  required style="width:300px" value="<?php if (array_key_exists('nom', $_POST)) echo htmlspecialchars($_POST['nom']); ?>" required/></div>
+	<h2></h2>
 	<h4 class="auto-style1">Mot de passe</h4>
 	<div class="auto-style1">
 		<input class="auto-style2" type="password" name="mdp" placeholder="Mot de passe" required="required" style="width: 300px"/></div>
@@ -213,62 +149,4 @@ function app_sel(valeur) { // Le param valeur servira à savoir <uel select affi
 </script>
 						<br/><br/><br/>
 		<!-- /home wrapper -->
-	<header id="footer" class="sm-padding bg-grey">
-
-		<!-- Container -->
-		<div class="container">
-
-			<!-- Row -->
-			<div class="row">
-
-				<div class="col-md-12">
-
-					<!-- footer logo -->
-					<div class="footer-logo">
-						<a href="http://www.lp2i-poitiers.fr/" target="_blank"><img src="img/lp2i.png" alt="logo"></a>
-					</div>
-
-
-					<!-- /footer logo -->
-
-
-
-					<!-- footer copyright -->
-					<div class="footer-copyright">
-						<p>Copyright &copy; 2019 2iConnect.fr - Tous droits r&eacute;serv&eacute;s</a><br>
-					</div>
-					<!-- /footer copyright -->
-				</div>
-               
-			</div>
-			<!-- /Row -->
-
-		</div>
-		<!-- /Container -->
-
-	</header>
-	<!-- /Footer -->
-
-	<!-- Back to top -->
-	<div id="back-to-top"></div>
-	<!-- /Back to top -->
-
-	<!-- Preloader -->
-	<div id="preloader">
-		<div class="preloader">
-			<span></span>
-			<span></span>
-			<span></span>
-			<span></span>
-		</div>
-	</div>
-	<!-- /Preloader -->
-
-	<!-- jQuery Plugins -->
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/owl.carousel.min.js"></script>
-	<script src="js/jquery.magnific-popup.js"></script>
-	<script src="js/main.js"></script>
-</body>
-</html>
+	<?php include('footer.php') ?>
