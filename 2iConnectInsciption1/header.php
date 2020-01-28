@@ -103,7 +103,7 @@ echo"<script>document.write('<script src=\"http://' + (location.host || '127.10.
 					<div class="col-md-10 col-md-offset-1">
 						<div class="home-content">
 							<h1 class="white-text">2iConnect</h1>
-							<h4 class="white-text">Une application pour améliorer la vie lycéenne.</h4>
+							<h4 class="white-text">Une application qui améliore la vie lycéenne.</h4>
 							</h4>
 						</div>
 					</div>

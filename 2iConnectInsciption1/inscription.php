@@ -51,7 +51,7 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 
     if (!$errors) {
         $insert = $bdd->prepare('INSERT INTO membres( mail,mot_de_passe,nom,prenom) VALUES(:mail, :mdp,:nom,:prenom)');
-        $insert->execute([ 'mail' => $_POST['mail'],  'mdp' => password_hash($_POST['mdp'], $password_options['algo'], $password_options['options']),'nom' => $_POST['nom'],'prenom' => $_POST['prenom']]);
+        $insert->execute([ 'mail' => strip_tags(['mail']),  'mdp' => password_hash($_POST['mdp'], $password_options['algo'], $password_options['options']),'nom' => strip_tags($_POST['nom']),'prenom' => strip_tags($_POST['prenom'])]);
        $fail = FALSE;
 if ('POST' == $_SERVER['REQUEST_METHOD']) {
 
