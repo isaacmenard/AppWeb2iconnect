@@ -27,14 +27,11 @@ if(isset($_POST['forminscription'])) {
                if($mailexist == 0) {
                   if($mdp == $mdp2) {
                      $longueurKey = 15;
-                     $key = "";
-                     for($i=1;$i<$longueurKey;$i++) {
-                        $key .= mt_rand(0,9);
-                     }
+                     $key = uniqid();
 					  
-                     $insert = $bdd->prepare("INSERT INTO membres(nom, prenom, mail, motdepasse, confirmkey, uniqid) VALUES(:nom, :prenom, :mail, :motdepasse, :confirmkey, :uniqid)");
+                     $insert = $bdd->prepare("INSERT INTO membres(nom, prenom, mail, motdepasse, confirme, confirmkey) VALUES(:nom, :prenom, :mail, :motdepasse, :confirme, :uniqid)");
 
-                     $insert->execute([ 'nom' => $nom,  'prenom' => $prenom,'mail' => $mail,'motdepasse' => $mdp,'confirmkey' => 0,'uniqid' => uniqid()]);
+                     $insert->execute([ 'nom' => $nom,  'prenom' => $prenom,'mail' => $mail,'motdepasse' => $mdp,'confirme' => 0,'uniqid' =>  $key]);
 					
 					  
                      $header="MIME-Version: 1.0\r\n";

@@ -19,7 +19,7 @@ if(isset($_GET['nom'], $_GET['key']) AND !empty($_GET['nom']) AND !empty($_GET['
       $user = $requser->fetch();
       if($user['confirme'] == 0) {
          $updateuser = $bdd->prepare("UPDATE membres SET confirme = 1 WHERE nom = :nom AND confirmkey = :key");
-         $updateuser->execute('nom' => $nom,  'key' => $key);
+         $updateuser->execute(['nom' => $nom,  'key' => $key]);
          echo "Votre compte a bien été confirmé !";
       } else {
          echo "Votre compte a déjà été confirmé !";
