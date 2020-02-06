@@ -34,7 +34,7 @@ if(isset($_POST['forminscription'])) {
 					  
                      $insert = $bdd->prepare("INSERT INTO membres(nom, prenom, mail, motdepasse, confirmkey, uniqid) VALUES(:nom, :prenom, :mail, :motdepasse, :confirmkey, :uniqid)");
 
-                     $insert->execute([ 'nom' => $nom,  'prenom' => $prenom,'mail' => $mail,'motdepasse' => $mdp,'confirmkey' => 0,'uniqid' => uniqid('', true)]);
+                     $insert->execute([ 'nom' => $nom,  'prenom' => $prenom,'mail' => $mail,'motdepasse' => $mdp,'confirmkey' => 0,'uniqid' => uniqid()]);
 					
 					  
                      $header="MIME-Version: 1.0\r\n";
