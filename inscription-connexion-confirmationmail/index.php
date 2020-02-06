@@ -1,6 +1,13 @@
 <?php
+try
+{
 $bdd = new PDO('mysql:host=127.10.0.3;dbname=espace_membre', 'root', '');
-
+$bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}
+catch (Exception $e)
+{
+        die('Erreur : ' . $e->getMessage());
+}
 if(isset($_POST['forminscription'])) {
    $nom = strip_tags(htmlspecialchars($_POST['nom']));
    $prenom = strip_tags(htmlspecialchars($_POST['prenom']));
