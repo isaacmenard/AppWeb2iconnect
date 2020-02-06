@@ -2,12 +2,12 @@
 $bdd = new PDO('mysql:host=127.10.0.3;dbname=espace_membre', 'root', '');
 
 if(isset($_POST['forminscription'])) {
-   $nom = htmlspecialchars($_POST['nom']);
-   $baptiste = htmlspecialchars($_POST['prenom']);
-   $mail = htmlspecialchars($_POST['mail']);
-   $mail2 = htmlspecialchars($_POST['mail2']);
-   $mdp = sha1($_POST['mdp']);
-   $mdp2 = sha1($_POST['mdp2']);
+   $nom = strip_tags(htmlspecialchars($_POST['nom']));
+   $baptiste = strip_tags(htmlspecialchars($_POST['prenom']));
+   $mail = strip_tags(htmlspecialchars($_POST['mail']));
+   $mail2 = strip_tags(htmlspecialchars($_POST['mail2']));
+   $mdp = strip_tags(sha1($_POST['mdp']));
+   $mdp2 = strip_tags(sha1($_POST['mdp2']));
    if(!empty($_POST['nom']) AND !empty($_POST['mail']) AND !empty($_POST['mail2']) AND !empty($_POST['mdp']) AND !empty($_POST['mdp2'])) {
       $nomlength = strlen($nom);
       $prenomlength = strlen($prenom);
@@ -24,10 +24,11 @@ if(isset($_POST['forminscription'])) {
                      for($i=1;$i<$longueurKey;$i++) {
                         $key .= mt_rand(0,9);
                      }
-                     $insertmbr = $bdd->prepare("INSERT INTO membres(nom, prenom, mail, motdepasse, confirmkey, uniqid) VALUES(?, ?, ?, ?, ?, ?)");
+                     $insertmbr = $bdd->prepare("INSERT INTO membres(nom, prenom, mail, motdepasse, confirmkey, uniqid) VALUES(:nom, :prenom, :mail, :motdepasse, :confirmkey, :uniqid)");
 
-                     $insertmbr->execute(array($nom, $prenom, $mail, $mdp, $key, uniqid()));
-
+                     $insertmbr->execute([ 'nom' => $nom,  'prenom' => $prenom,'mail' => $mail,'motdepasse' => $mdp,'confirmkey' => 0,'uniqid' => uniqid('', true)])
+					
+					  
                      $header="MIME-Version: 1.0\r\n";
                      $header.='From:"2iConnect.fr"<2iconnect.lp2i@gmail.com>'."\n";
                      $header.='Content-Type:text/html; charset="uft-8"'."\n";
