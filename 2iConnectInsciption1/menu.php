@@ -31,7 +31,7 @@ if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
 
 include( 'header.php' );
 $dateSelect = date( "Y-m-d" );
-$dateSValue = date( "Y-m-d" );
+$dateSValue = date( "Y-m-d");
 if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
   if ( array_key_exists( 'dateSelect', $_POST ) ) {
     $format = 'Y-m-d';
