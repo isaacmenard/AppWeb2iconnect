@@ -3,7 +3,7 @@ $bdd = new PDO('mysql:host=127.10.0.3;dbname=espace_membre', 'root', '');
 
 if(isset($_POST['forminscription'])) {
    $nom = strip_tags(htmlspecialchars($_POST['nom']));
-   $baptiste = strip_tags(htmlspecialchars($_POST['prenom']));
+   $prenom = strip_tags(htmlspecialchars($_POST['prenom']));
    $mail = strip_tags(htmlspecialchars($_POST['mail']));
    $mail2 = strip_tags(htmlspecialchars($_POST['mail2']));
    $mdp = strip_tags(sha1($_POST['mdp']));
@@ -24,9 +24,10 @@ if(isset($_POST['forminscription'])) {
                      for($i=1;$i<$longueurKey;$i++) {
                         $key .= mt_rand(0,9);
                      }
-                     $insertmbr = $bdd->prepare("INSERT INTO membres(nom, prenom, mail, motdepasse, confirmkey, uniqid) VALUES(:nom, :prenom, :mail, :motdepasse, :confirmkey, :uniqid)");
+					  
+                     $insert = $bdd->prepare("INSERT INTO membres(nom, prenom, mail, motdepasse, confirmkey, uniqid) VALUES(:nom, :prenom, :mail, :motdepasse, :confirmkey, :uniqid)");
 
-                     $insertmbr->execute([ 'nom' => $nom,  'prenom' => $prenom,'mail' => $mail,'motdepasse' => $mdp,'confirmkey' => 0,'uniqid' => uniqid('', true)]);
+                     $insert->execute([ 'nom' => $nom,  'prenom' => $prenom,'mail' => $mail,'motdepasse' => $mdp,'confirmkey' => 0,'uniqid' => uniqid('', true)]);
 					
 					  
                      $header="MIME-Version: 1.0\r\n";
