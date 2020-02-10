@@ -1,0 +1,38 @@
+
+img{
+    height: 480px;
+    width: 480px;
+}
+body{
+    margin-left: 0px;
+    background-color: gold;
+}
+h1{
+
+    text-align: center; 
+}
+
+div{
+   
+    height: 2%;
+    width: auto;
+    background-color: gray;
+}
+.box1{
+    
+    padding-left: 0px;
+    margin-left: 0px;
+    background-color: green;
+}
+.box2{
+    float: right;
+    padding-left: 0% ;
+    margin-left: 0%;
+    
+    background-color: indigo;
+}
+.box3{
+    float: right;
+    padding-left: 0%;
+    width: 0%;
+}
