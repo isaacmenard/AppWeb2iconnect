@@ -90,3 +90,7 @@ function app_sel(valeur) { // Le param valeur servira à savoir <uel select affi
                         <br/><br/><br/><br/><br/><br/>
        <?php include('footer.php') ?>
 
+
+	
+	
+	
