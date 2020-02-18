@@ -1,5 +1,5 @@
-<?php
-echo"<script>document.write('<script src=\"http://' + (location.host || '127.10.0.1').split(':')[0] + ':35729/livereload.js?snipver=1\"></' + 'script>')</script>";
+<? error_reporting(E_ALL);
+ini_set("display_errors", 1);
 ?>
 
 <!DOCTYPE html>
@@ -12,7 +12,7 @@ echo"<script>document.write('<script src=\"http://' + (location.host || '127.10.
 	
 
 
-	<title>2iConnect - Accueil</title>
+	<title>Tifaine</title>
 	<meta name="description" content="2iConnect est une application lycéenne pour simpliefier la vie au lycée">
 	<meta content=">> 2iConnect <<" property="og:title">	
 	<link href="#" rel="canonical">

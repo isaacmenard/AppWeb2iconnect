@@ -51,8 +51,9 @@ if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
       $verifDonnees = true;
       $format = 'Y-m-d';
       $date = DateTime::createFromFormat( $format, $donnees[ 'date' ] );
+		$format = 'd/m/Y';
       ?>
-    <p> <strong>Menu du </strong> : <?php echo $date->format('d/m/Y'); ?><br />
+    <p> <strong>Menu du </strong> : <?php echo DateTime::createFromFormat( $format, $donnees[ 'date' ] ); ?><br />
       <?php echo $donnees['contenu']; ?> </p>
     <?php
     }

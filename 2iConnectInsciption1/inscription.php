@@ -1,5 +1,4 @@
 <?php  
-echo"<script>document.write('<script src=\"http://' + (location.host || '127.10.0.1').split(':')[0] + ':35729/livereload.js?snipver=1\"></' + 'script>')</script>";
 include("include.php")
 ?>
 <link rel="stylesheet" href="style.css">
