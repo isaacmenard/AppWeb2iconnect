@@ -1,5 +1,7 @@
 <?php  
 include("include.php")
+	
+
 ?>
 <link rel="stylesheet" href="style.css">
 <?php
@@ -50,7 +52,8 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 
     if (!$errors) {
         $insert = $bdd->prepare('INSERT INTO membres( mail,mot_de_passe,nom,prenom) VALUES(:mail, :mdp,:nom,:prenom)');
-        $insert->execute([ 'mail' => strip_tags(['mail']),  'mdp' => password_hash($_POST['mdp'], $password_options['algo'], $password_options['options']),'nom' => strip_tags($_POST['nom']),'prenom' => strip_tags($_POST['prenom'])]);
+		echo(gettype($_POST['mail']));
+        $insert->execute([ 'mail' => strip_tags($_POST['mail']),  'mdp' => password_hash($_POST['mdp'], $password_options['algo'], $password_options['options']),'nom' => strip_tags($_POST['nom']),'prenom' => strip_tags($_POST['prenom'])]);
        $fail = FALSE;
 if ('POST' == $_SERVER['REQUEST_METHOD']) {
 
@@ -59,12 +62,14 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
     if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         if (password_verify($_POST['mdp'], $row['mot_de_passe'])) {
             $_SESSION['id'] = $row['id'];
+			$_SESSION['name'] = $row['prenom'];
+			$_SESSION['statue'] = true;
             if (password_needs_rehash($row['mot_de_passe'], $password_options['algo'], $password_options['options'])) {
                 $stmt = $bdd->prepare('UPDATE membres SET mot_de_passe = :new_hash WHERE id = :id');
                 $stmt->execute(['id' => $row['id'], 'new_hash' => password_hash($_POST['password'], $password_options['algo'], $password_options['options'])]);
             }
-            header('Location: connexion.php');
-            echo "<script>window.location.replace('connexion.php');</script><p>connexion</p>";
+            header('Location: espacemembre');
+            echo "<script>window.location.replace('espacemembre');</script><p>connexion</p>";
             exit;
         } else {
             $fail = TRUE;
@@ -76,6 +81,10 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 		
     }
 }
+
+mb_internal_encoding('UTF-8');
+setlocale(LC_CTYPE, 'fr_FR.UTF-8');
+header( 'content-type: text/html; charset=utf-8' );
 ?>
 <?php include('header.php') ?>
 		<div class="home-wrapper">
@@ -110,11 +119,11 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
         ?>
 		</div>
 		<br />
-	<form method="POST" id="form">		<!-- Création d'un formulaire donc POST est le script à charger, action est le fichier php de notre formulaire, ainsi que autocomplete permet de préremplir automatiquement les données de l'utilisateur.--> 
+	<form method="POST" id="form">		<!-- Création d'un formulaire donc POST est le script à charger, action est le fichier php de notre formulaire, ainsi que autocomplete permet de préremplir automatiquement les données de l'utilisateur.       pattern=".+@lp2i-poitiers.fr"--> 
 	<div><h4 class="auto-style1">Email (@lp2i-poitiers.fr)</h4>
 	<div class="auto-style1">
 		<input name="Hidden1" type="hidden" />
-		<input class="nouveauStyle1" type="email" id="mail" name="mail" placeholder="Mail" pattern=".+@lp2i-poitiers.fr" required style="width:300px" value="<?php if (array_key_exists('mail', $_POST)) echo htmlspecialchars($_POST['mail']); ?>" required/></div>
+		<input class="nouveauStyle1" type="email" id="mail" name="mail" placeholder="Mail"  required style="width:300px" value="<?php if (array_key_exists('mail', $_POST)) echo htmlspecialchars($_POST['mail']); ?>" required/></div>
 	<h2></h2>
 		<div><h4 class="auto-style1">Prénom - Nom</h4>
 	<div class="auto-style1">

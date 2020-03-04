@@ -1,14 +1,17 @@
 <?php
 session_start();
 $_SESSION = array();
-session_destroy();
 
-session_start();
 include("include.php");
 if (isset($_SESSION['id'])) {
     header('Location: index.php');
     exit;
 }
+
+
+mb_internal_encoding('UTF-8');
+setlocale(LC_CTYPE, 'fr_FR.UTF-8');
+header( 'content-type: text/html; charset=utf-8' );
 
 $fail = FALSE;
 if ('POST' == $_SERVER['REQUEST_METHOD']) {
@@ -18,12 +21,14 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
     if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         if (password_verify($_POST['password'], $row['mot_de_passe'])) {
             $_SESSION['id'] = $row['id'];
+			$_SESSION['name'] = $row['prenom'];
+			$_SESSION['statue'] = true;
             if (password_needs_rehash($row['mot_de_passe'], $password_options['algo'], $password_options['options'])) {
                 $stmt = $bdd->prepare('UPDATE membres SET mot_de_passe = :new_hash WHERE id = :id');
                 $stmt->execute(['id' => $row['id'], 'new_hash' => password_hash($_POST['password'], $password_options['algo'], $password_options['options'])]);
             }
-            header('Location: espacemembre.php');
-            echo "<script>window.location.replace('espacemembre.php');</script><p>Connexion en cours</p>";
+            header('Location: espacemembre');
+            echo "<script>window.location.replace('espacemembre');</script><p>Connexion en cours</p>";
             exit;
         } else {
             $fail = TRUE;

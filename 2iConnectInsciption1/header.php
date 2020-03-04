@@ -1,18 +1,24 @@
 <? error_reporting(E_ALL);
 ini_set("display_errors", 1);
+
+mb_internal_encoding('UTF-8');
+setlocale(LC_CTYPE, 'fr_FR.UTF-8');
+header( 'content-type: text/html; charset=utf-8' );
+
 ?>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr" dir="ltr">
 <head>
+	<META http-equiv="Content-Type" Content="text/html; charset=utf-8">
 	<link rel="icon" href="logo.ico" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-
-	<title>Tifaine</title>
+	<title>2iconnect</title>
 	<meta name="description" content="2iConnect est une application lycéenne pour simpliefier la vie au lycée">
 	<meta content=">> 2iConnect <<" property="og:title">	
 	<link href="#" rel="canonical">
@@ -80,12 +86,12 @@ ini_set("display_errors", 1);
 
 				<!--  Main navigation  -->
 				<ul class="main-nav nav navbar-nav navbar-right">
-					<li><a href="#Index.php">Accueil</a></li>
-					<li><a href="Infos.php">Infos</a></li>
-					<li><a href="menu.php">Menu</a></li>
-					<li><a href="Contact.php">Contact</a></li>
-					<li><a href="espace_de_connexion_inscription.php">Espace Membre</a></li>
-					<li><a href="creation_entreprise.php">Créer un compte entreprise</a></li>
+					<li><a href="./">Accueil</a></li>
+					<li><a href="Infos">Infos</a></li>
+					<li><a href="menu">Menu</a></li>
+					<li><a href="Contact">Contact</a></li>
+					<li><a href="espace_de_connexion_inscription">Espace Membre</a></li>
+					<li><a href="creation_entreprise">Créer un compte entreprise</a></li>
 				</ul>
 				<!-- /Main navigation -->
 
