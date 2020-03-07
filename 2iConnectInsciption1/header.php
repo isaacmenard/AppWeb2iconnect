@@ -1,9 +1,6 @@
 <? error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-mb_internal_encoding('UTF-8');
-setlocale(LC_CTYPE, 'fr_FR.UTF-8');
-header( 'content-type: text/html; charset=utf-8' );
 
 ?>
 

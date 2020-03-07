@@ -1,10 +1,5 @@
 <?php  
-include("include.php")
-	
-
-?>
-<link rel="stylesheet" href="style.css">
-<?php
+include("include.php");
 session_start();
 if(isset($_SESSION['id'])){
 	header('Location:connexion.php');
@@ -85,6 +80,8 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
 mb_internal_encoding('UTF-8');
 setlocale(LC_CTYPE, 'fr_FR.UTF-8');
 header( 'content-type: text/html; charset=utf-8' );
+
+
 ?>
 <?php include('header.php') ?>
 		<div class="home-wrapper">
