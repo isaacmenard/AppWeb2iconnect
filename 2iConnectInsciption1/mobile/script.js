@@ -23,7 +23,7 @@ function refreshHour(){
 
 for(var i = 0; i < document.getElementsByClassName("contenaire").length;i++){
 	document.getElementsByClassName("contenaire")[i].addEventListener('click', function (ev) {
-	  if(ev.target.className == "contenaire" || ev.target.className == "contenaire active"){
+	  if(ev.target.className == "contenaire" || ev.target.className == "contenaire active" || ev.target.className == "canCLick"){
 		  
 		if(this.className == "contenaire active"){
 			this.className = "contenaire"
