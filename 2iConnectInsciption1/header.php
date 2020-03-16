@@ -1,6 +1,11 @@
-<? error_reporting(E_ALL);
+<?php error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
+if (stristr($_SERVER['HTTP_USER_AGENT'], "Android")
+   || strpos($_SERVER['HTTP_USER_AGENT'], "iPod")
+   || strpos($_SERVER['HTTP_USER_AGENT'], "iPhone") ){
+		echo('<script>window.location="mobile/"</script>');	
+   }
 
 ?>
 
