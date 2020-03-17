@@ -20,6 +20,9 @@ mb_internal_encoding( 'UTF-8' );
 
 $fail = FALSE;
 
+
+
+
 if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
   if ( array_key_exists( 'mail', $_POST ) ) {
   $stmt = $bdd->prepare( 'SELECT * FROM membres WHERE mail = :mail' );
@@ -56,11 +59,34 @@ if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
 		}
 	}
 	
-	if ( array_key_exists( 'pdp', $_POST ) ) {
-		if ( !$errors ) {
-		  $nb_modifs = $bdd->exec('UPDATE membres SET pdp = "'.strip_tags( $_POST[ 'pdp' ]).'" WHERE id_membres = \''.$_SESSION['id'].'\'');
-		}
-	}
+	
+	if(isset($_FILES['avatar']) AND !empty($_FILES['avatar']['name'])) {
+   $tailleMax = 2097152;
+   $extensionsValides = array('jpg', 'jpeg', 'gif', 'png');
+   if($_FILES['avatar']['size'] <= $tailleMax) {
+      $extensionUpload = strtolower(substr(strrchr($_FILES['avatar']['name'], '.'), 1));
+      if(in_array($extensionUpload, $extensionsValides)) {
+         $chemin = "./img/".$_SESSION['id'].".".$extensionUpload;
+         $resultat = move_uploaded_file($_FILES['avatar']['tmp_name'], $chemin);
+         if($resultat) {
+            $updateavatar = $bdd->prepare('UPDATE membres SET pdp = :avatar WHERE id_membres = :id');
+            $updateavatar->execute(array(
+               'avatar' => $_SESSION['id'].".".$extensionUpload,
+               'id' => $_SESSION['id']
+               ));
+         } else {
+            $msg = "Erreur durant l'importation de votre photo de profil";
+         }
+      } else {
+         $msg = "Votre photo de profil doit être au format jpg, jpeg, gif ou png";
+      }
+   } else {
+      $msg = "Votre photo de profil ne doit pas dépasser 2Mo";
+   }
+}
+
+	
+	
 	
 	
   if ( array_key_exists( 'mailI', $_POST ) ) {
@@ -198,12 +224,9 @@ if ( $connected == true ) {
 <div class="contenaire">
   <h3 class="canCLick">Profil</h3>
   <p class="canCLick">Vous êtes connecté en tant que <?php echo($_SESSION[ 'name' ]);?> </p>
-		<form method="POST" id="connexion" class="form-style-2 invisible">
-			<br>
-			<p>Vous pouvez ajouter une photo de profil en faisant "copier l'adresse de l'image" et en collant ici :</p>
-			<br>
-    <label for="field1"><span>Url de l'image <span class="required">*</span></span>
-      <input type="text" class="input-field" id="pdp" name="pdp" value="" />
+		<form method="POST" id="connexion" enctype="multipart/form-data" class="form-style-2 invisible">
+    <label for="field1"><span>image de profil : <span class="required">*</span></span>
+      <input type="file" class="input-field" id="pdp" name="avatar" value="" />
     </label>
     <label><span> </span>
       <input type="submit" value="poster !" />
@@ -243,7 +266,7 @@ $reponse2 = $bdd->query('SELECT * FROM membres WHERE id_membres = "'.$donnees['i
 while ($donnees2 = $reponse2->fetch())
 {
 	if($donnees2['pdp'] != null){
-		$pdpUrl = $donnees2['pdp'] ;
+		$pdpUrl = "img/".$donnees2['pdp'] ;
 	}
 	
 ?>
