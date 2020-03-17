@@ -1,5 +1,5 @@
 <?php
-include("../include.php");
+include( "../include.php" );
 session_start();
 
 $pdpUrl = "https://lh6.googleusercontent.com/oucxDw25YzIkYzOTExEsrO2uCob-br7Y9GhruotO_QBwMbRovgybILAB_JxNwT4UYgDosfzv08eh-Msa-IaF3GYnFF1CATfPW8Q5At31Hz5nKUNORtIX-EOkBer9E7QfSA=s412";
@@ -21,74 +21,69 @@ mb_internal_encoding( 'UTF-8' );
 $fail = FALSE;
 
 
-
-
 if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
   if ( array_key_exists( 'mail', $_POST ) ) {
-  $stmt = $bdd->prepare( 'SELECT * FROM membres WHERE mail = :mail' );
-  $stmt->execute( [ 'mail' => $_POST[ 'mail' ] ] );
-  if ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
-    if ( password_verify( $_POST[ 'mdp' ], $row[ 'mot_de_passe' ] ) ) {
-      $_SESSION[ 'id' ] = $row[ 'id_membres' ];
-      $_SESSION[ 'name' ] = $row[ 'prenom' ];
-      $_SESSION[ 'statue' ] = true;
-		$connected = true;
-      if ( password_needs_rehash( $row[ 'mot_de_passe' ], $password_options[ 'algo' ], $password_options[ 'options' ] ) ) {
-        $stmt = $bdd->prepare( 'UPDATE membres SET mot_de_passe = :new_hash WHERE id = :id' );
-        $stmt->execute( [ 'id' => $row[ 'id' ], 'new_hash' => password_hash( $_POST[ 'mdp' ], $password_options[ 'algo' ], $password_options[ 'options' ] ) ] );
-      }
+    $stmt = $bdd->prepare( 'SELECT * FROM membres WHERE mail = :mail' );
+    $stmt->execute( [ 'mail' => $_POST[ 'mail' ] ] );
+    if ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+      if ( password_verify( $_POST[ 'mdp' ], $row[ 'mot_de_passe' ] ) ) {
+        $_SESSION[ 'id' ] = $row[ 'id_membres' ];
+        $_SESSION[ 'name' ] = $row[ 'prenom' ];
+        $_SESSION[ 'statue' ] = true;
+        $connected = true;
+        if ( password_needs_rehash( $row[ 'mot_de_passe' ], $password_options[ 'algo' ], $password_options[ 'options' ] ) ) {
+          $stmt = $bdd->prepare( 'UPDATE membres SET mot_de_passe = :new_hash WHERE id = :id' );
+          $stmt->execute( [ 'id' => $row[ 'id' ], 'new_hash' => password_hash( $_POST[ 'mdp' ], $password_options[ 'algo' ], $password_options[ 'options' ] ) ] );
+        }
 
+      } else {
+        echo( "<script>mot de passe ou pseudo incorrect</script>" );
+        $fail = TRUE;
+      }
     } else {
-		echo("<script>mot de passe ou pseudo incorrect</script>");
+      echo( "<script>mot de passe ou pseudo incorrect</script>" );
       $fail = TRUE;
     }
-  } else {
-	  		echo("<script>mot de passe ou pseudo incorrect</script>");
-    $fail = TRUE;
   }
-}
 }
 
 if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
-	if ( array_key_exists( 'comment', $_POST ) ) {
-		if ( !$errors ) {
-		  $insert = $bdd->prepare( 'INSERT INTO comment( user,comment,date) VALUES(:user, :comment,NOW())' );
-		  $insert->execute( [ 'user' => strip_tags( $_SESSION['id']), 'comment' => strip_tags( $_POST[ 'comment' ] ) ] );
-		  $fail = FALSE;
+  if ( array_key_exists( 'comment', $_POST ) ) {
+    if ( !$errors ) {
+      $insert = $bdd->prepare( 'INSERT INTO comment( user,comment,date) VALUES(:user, :comment,NOW())' );
+      $insert->execute( [ 'user' => strip_tags( $_SESSION[ 'id' ] ), 'comment' => strip_tags( $_POST[ 'comment' ] ) ] );
+      $fail = FALSE;
 
-		}
-	}
-	
-	
-	if(isset($_FILES['avatar']) AND !empty($_FILES['avatar']['name'])) {
-   $tailleMax = 2097152;
-   $extensionsValides = array('jpg', 'jpeg', 'gif', 'png');
-   if($_FILES['avatar']['size'] <= $tailleMax) {
-      $extensionUpload = strtolower(substr(strrchr($_FILES['avatar']['name'], '.'), 1));
-      if(in_array($extensionUpload, $extensionsValides)) {
-         $chemin = "./img/".$_SESSION['id'].".".$extensionUpload;
-         $resultat = move_uploaded_file($_FILES['avatar']['tmp_name'], $chemin);
-         if($resultat) {
-            $updateavatar = $bdd->prepare('UPDATE membres SET pdp = :avatar WHERE id_membres = :id');
-            $updateavatar->execute(array(
-               'avatar' => $_SESSION['id'].".".$extensionUpload,
-               'id' => $_SESSION['id']
-               ));
-         } else {
-            $msg = "Erreur durant l'importation de votre photo de profil";
-         }
+    }
+  }
+
+
+  if ( isset( $_FILES[ 'avatar' ] )AND!empty( $_FILES[ 'avatar' ][ 'name' ] ) ) {
+    $tailleMax = 2097152;
+    $extensionsValides = array( 'jpg', 'jpeg', 'gif', 'png' );
+    if ( $_FILES[ 'avatar' ][ 'size' ] <= $tailleMax ) {
+      $extensionUpload = strtolower( substr( strrchr( $_FILES[ 'avatar' ][ 'name' ], '.' ), 1 ) );
+      if ( in_array( $extensionUpload, $extensionsValides ) ) {
+        $chemin = "./img/" . $_SESSION[ 'id' ] . "." . $extensionUpload;
+        $resultat = move_uploaded_file( $_FILES[ 'avatar' ][ 'tmp_name' ], $chemin );
+        if ( $resultat ) {
+          $updateavatar = $bdd->prepare( 'UPDATE membres SET pdp = :avatar WHERE id_membres = :id' );
+          $updateavatar->execute( array(
+            'avatar' => $_SESSION[ 'id' ] . "." . $extensionUpload,
+            'id' => $_SESSION[ 'id' ]
+          ) );
+        } else {
+          $msg = "Erreur durant l'importation de votre photo de profil";
+        }
       } else {
-         $msg = "Votre photo de profil doit être au format jpg, jpeg, gif ou png";
+        $msg = "Votre photo de profil doit être au format jpg, jpeg, gif ou png";
       }
-   } else {
+    } else {
       $msg = "Votre photo de profil ne doit pas dépasser 2Mo";
-   }
-}
+    }
+  }
 
-	
-	
-	
-	
+
   if ( array_key_exists( 'mailI', $_POST ) ) {
     if ( array_key_exists( 'mailI', $_POST ) ) {
 
@@ -124,31 +119,30 @@ if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
       $insert = $bdd->prepare( 'INSERT INTO membres( mail,mot_de_passe,nom,prenom) VALUES(:mail, :mdp,:nom,:prenom)' );
       $insert->execute( [ 'mail' => strip_tags( $_POST[ 'mailI' ] ), 'mdp' => password_hash( $_POST[ 'mdpI' ], $password_options[ 'algo' ], $password_options[ 'options' ] ), 'nom' => strip_tags( $_POST[ 'nomI' ] ), 'prenom' => strip_tags( $_POST[ 'prenomI' ] ) ] );
       $fail = FALSE;
-		
-		$stmt = $bdd->prepare('SELECT * FROM membres WHERE mail = :mail');
-    $stmt->execute(['mail' => $_POST['mailI']]);
-    if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        if (password_verify($_POST['mdpI'], $row['mot_de_passe'])) {
-            $_SESSION['id'] = $row['id_membres'];
-			$_SESSION['name'] = $row['prenom'];
-			$_SESSION['statue'] = true;
-			$connected = true;
-            if (password_needs_rehash($row['mot_de_passe'], $password_options['algo'], $password_options['options'])) {
-                $stmt = $bdd->prepare('UPDATE membres SET mot_de_passe = :new_hash WHERE id = :id');
-                $stmt->execute(['id' => $row['id'], 'new_hash' => password_hash($_POST['mdpI'], $password_options['algo'], $password_options['options'])]);
-            }
+
+      $stmt = $bdd->prepare( 'SELECT * FROM membres WHERE mail = :mail' );
+      $stmt->execute( [ 'mail' => $_POST[ 'mailI' ] ] );
+      if ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+        if ( password_verify( $_POST[ 'mdpI' ], $row[ 'mot_de_passe' ] ) ) {
+          $_SESSION[ 'id' ] = $row[ 'id_membres' ];
+          $_SESSION[ 'name' ] = $row[ 'prenom' ];
+          $_SESSION[ 'statue' ] = true;
+          $connected = true;
+          if ( password_needs_rehash( $row[ 'mot_de_passe' ], $password_options[ 'algo' ], $password_options[ 'options' ] ) ) {
+            $stmt = $bdd->prepare( 'UPDATE membres SET mot_de_passe = :new_hash WHERE id = :id' );
+            $stmt->execute( [ 'id' => $row[ 'id' ], 'new_hash' => password_hash( $_POST[ 'mdpI' ], $password_options[ 'algo' ], $password_options[ 'options' ] ) ] );
+          }
 
         } else {
-            $fail = TRUE;
+          $fail = TRUE;
         }
-    } else {
+      } else {
         $fail = TRUE;
+      }
+
     }
-		
-    }
-	  
-	  
-	  
+
+
   }
 }
 
@@ -166,7 +160,7 @@ header( 'content-type: text/html; charset=utf-8' );
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
 <link rel="stylesheet" href="./style.css">
 <link href="https://fonts.googleapis.com/css?family=Sen&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300&display=swap" rel="stylesheet">
 </head>
 <body>
 <header>
@@ -224,12 +218,13 @@ if ( $connected == true ) {
 <div class="contenaire">
   <h3 class="canCLick">Profil</h3>
   <p class="canCLick">Vous êtes connecté en tant que <?php echo($_SESSION[ 'name' ]);?> </p>
-		<form method="POST" id="connexion" enctype="multipart/form-data" class="form-style-2 invisible">
-    <label for="field1"><span>image de profil : <span class="required">*</span></span>
-      <input type="file" class="input-field" id="pdp" name="avatar" value="" />
-    </label>
-    <label><span> </span>
-      <input type="submit" value="poster !" />
+	<br>
+  <form method="POST" id="connexion" enctype="multipart/form-data" class="form-style-2 invisible">
+    <div class="input-file-container">
+      <input class="input-file" id="my-file" name="avatar" type="file">
+      <label tabindex="0" for="my-file" class="input-file-trigger">Selectionnez votre Photo de profil</label>
+    </div>
+    <input type="submit" value="poster !" />
     </label>
   </form>
 </div>
@@ -243,59 +238,51 @@ if ( $connected == true ) {
   <p class="invisible"><br>
     "Selon l’évolution du contexte sanitaire, l’autorité préfectorale compétente pourra décider de l’éventuelle fermeture d’écoles ou d’établissements scolaires pendant une durée définie en fonction de la situation. Le directeur d’école ou le chef d’établissement concerné veillera à informer, aussitôt que possible, les familles des modalités de continuité pédagogique."</p>
 </div>
-	
-		
-	<h2>DERNIERS COMMENTAIRES :</h2>
+<h2>DERNIERS COMMENTAIRES :</h2>
 <div class="contenaire">
-	
-	<?php
-// On récupère tout le contenu de la table jeux_video
-$reponse = $bdd->query('SELECT * FROM comment  ORDER BY date DESC LIMIT 0, 5');
-$count = 0;
-// On affiche chaque entrée une à une
-while ($donnees = $reponse->fetch())
-{
-			if($count != 0){
-				echo('<hr>');
-			}
-	$count++;
-// On récupère tout le contenu de la table jeux_video
-$reponse2 = $bdd->query('SELECT * FROM membres WHERE id_membres = "'.$donnees['id'].'"');
+  <?php
+  // On récupère tout le contenu de la table jeux_video
+  $reponse = $bdd->query( 'SELECT * FROM comment  ORDER BY date DESC LIMIT 0, 5' );
+  $count = 0;
+  // On affiche chaque entrée une à une
+  while ( $donnees = $reponse->fetch() ) {
+    if ( $count != 0 ) {
+      echo( '<hr>' );
+    }
+    $count++;
 
-// On affiche chaque entrée une à une
-while ($donnees2 = $reponse2->fetch())
-{
-	if($donnees2['pdp'] != null){
-		$pdpUrl = "img/".$donnees2['pdp'] ;
-	}
-	
-?>
-    <div class="profilContenaire">
-			<div style="background-image: url('<?php echo($pdpUrl); ?>')" class="profil"></div>
+    // On récupère tout le contenu de la table jeux_video
+    $reponse2 = $bdd->query( 'SELECT * FROM membres WHERE id_membres = "' . $donnees[ 'user' ] . '"' );
 
-			<div class="text">
-				<h3><?php echo($donnees2['prenom']." ".$donnees2['nom']); ?></h3>
-				<p class="subtitle"><?php echo($donnees['date']) ?></p>
-				<p><?php echo($donnees['comment']) ?></p>
-			</div>
-		</div>
-	
-	<?php
-	}
-}
-$reponse->closeCursor(); // Termine le traitement de la requête
+    // On affiche chaque entrée une à une
+    while ( $donnees2 = $reponse2->fetch() ) {
+      if ( $donnees2[ 'pdp' ] != null ) {
+        $pdpUrl = "img/" . $donnees2[ 'pdp' ];
+      }
 
-?>
-	
+      ?>
+  <div class="profilContenaire">
+    <div style="background-image: url('<?php echo($pdpUrl); ?>')" class="profil"></div>
+    <div class="text">
+      <h3><?php echo($donnees2['prenom']." ".$donnees2['nom']); ?></h3>
+      <p class="subtitle"><?php echo($donnees['date']) ?></p>
+      <p><?php echo($donnees['comment']) ?></p>
+    </div>
+  </div>
+  <?php
+  }
+	  $reponse2->closeCursor(); // Termine le traitement de la requête
+  }
+  $reponse->closeCursor(); // Termine le traitement de la requête
 
-		
-		
-	</div>
-	<?php
+  ?>
+</div>
+<?php
 if ( $connected == true ) {
   ?>
-<div class="contenaire"><h3 class="canCLick">Poster un commentaire : </h3>
-	<form method="POST" id="connexion" class="form-style-2 ">
+<div class="contenaire">
+  <h3 class="canCLick">Poster un commentaire : </h3>
+  <form method="POST" id="connexion" class="form-style-2 ">
     <label for="field1"><span>Commentaire <span class="required">*</span></span>
       <input type="mail" class="input-field" id="comment" name="comment" value="" />
     </label>
@@ -303,14 +290,21 @@ if ( $connected == true ) {
       <input type="submit" value="poster !" />
     </label>
   </form>
-	</div>
-	<?php }?>
-<div class="contenaire"><h3 class="canCLick">Le Menu</h3><p class="invisible"><br> INDISPONIBLE</p></div>
-<div class="contenaire"><h3 class="canCLick">Signaler un problème</h3><p class="invisible"><br> INDISPONIBLE (oui c'est con)</p></div>
-<div class="contenaire">
-	<h3 class="canCLick">Une idée ?</h3>	
 </div>
-	
+<?php }?>
+<div class="contenaire">
+  <h3 class="canCLick">Le Menu</h3>
+  <p class="invisible"><br>
+    INDISPONIBLE</p>
+</div>
+<div class="contenaire">
+  <h3 class="canCLick">Signaler un problème</h3>
+  <p class="invisible"><br>
+    INDISPONIBLE (oui c'est con)</p>
+</div>
+<div class="contenaire">
+  <h3 class="canCLick">Une idée ?</h3>
+</div>
 <footer>Application lycéenne</footer>
 <script  src="./script.js"></script>
 </body>
