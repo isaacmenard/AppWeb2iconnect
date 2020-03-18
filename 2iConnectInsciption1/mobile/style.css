@@ -16,6 +16,22 @@ header{
 	border-bottom-right-radius: 10px;
 }
 
+.sondage{
+	width: 100%;
+}
+
+.sondage form{
+	display: inline-block;
+}
+.sondage #yes input{
+	background: #06A600;
+}
+
+.sondage #no input{
+	background: #FF3F00;
+}
+
+
 h2{
 	margin-left: 10px;
 	font-size:17px;
@@ -199,7 +215,6 @@ footer{
   background: #39D2B4;
   color: #fff;
   font-size: 1em;
-  transition: all .4s;
   cursor: pointer;
 }
 .js .input-file {
@@ -237,9 +252,52 @@ footer{
 
 
 
+.popUp{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.75);
+	top: 0;
+	left: 0;
+}
 
+.popUpChild{
+position: fixed;
 
+top: 5%;
 
+left: 5%;
+
+width: 70%;
+
+border-radius: 10px;
+
+-moz-box-shadow: 0 0 7px #a6a6a6;
+
+-webkit-box-shadow: 0 0 7px #a6a6a6;
+
+box-shadow: 0 0 7px #a6a6a6;
+
+background-color: white;
+
+height: 70%;
+
+padding-left: 10%;
+
+padding-right: 10%;
+	overflow: scroll;
+}
+.textIdea{
+	height: 100px;
+}
+.widgetMeteo{
+	margin-left: auto;
+	margin-right: auto; 
+}
+.invisibleComment{
+	visibility: hidden;
+	position: fixed;
+}
 .txtcenter {
   margin-top: 4em;
   font-size: .9em;

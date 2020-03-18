@@ -2,7 +2,24 @@
 include( "../include.php" );
 session_start();
 
-$pdpUrl = "https://lh6.googleusercontent.com/oucxDw25YzIkYzOTExEsrO2uCob-br7Y9GhruotO_QBwMbRovgybILAB_JxNwT4UYgDosfzv08eh-Msa-IaF3GYnFF1CATfPW8Q5At31Hz5nKUNORtIX-EOkBer9E7QfSA=s412";
+
+
+if (isset($_COOKIE['auth'])) {
+    $auth = explode('---', $_COOKIE['auth']);
+ 
+    if (count($auth) === 2) {
+        $req = $bdd->prepare('SELECT id_membres, prenom, mot_de_passe FROM membres WHERE id_membres = :id');
+        $req->execute([ ':id' => $auth[0] ]);
+        $user = $req->fetch(PDO::FETCH_ASSOC);
+         
+        if ($user && $auth[1] === hash('sha512', $user['prenom'].'---'.$user['mot_de_passe'])) {
+            // Ce que tu avais mis pour ta session à la connection
+              $_SESSION[ 'id' ] = $user[ 'id_membres' ];
+			$_SESSION[ 'name' ] = $user[ 'prenom' ];
+			$_SESSION[ 'pdp' ] = $user[ 'pdp' ];
+        }
+    }
+}
 
 if ( isset( $_SESSION[ 'id' ] ) ) {
   $connected = true;
@@ -30,6 +47,11 @@ if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
         $_SESSION[ 'id' ] = $row[ 'id_membres' ];
         $_SESSION[ 'name' ] = $row[ 'prenom' ];
         $_SESSION[ 'statue' ] = true;
+		 $_SESSION[ 'pdp' ] = $row[ 'pdp' ];
+		  
+		  // Donc quand c'est bon tu fais
+		$value = $row['id_membres'].'---'.hash('sha512', $row['prenom'].'---'.$_POST[ 'mdp' ]);
+		setcookie('auth', $value, time() + (365 * 24 * 3600) , null, null, false, true);
         $connected = true;
         if ( password_needs_rehash( $row[ 'mot_de_passe' ], $password_options[ 'algo' ], $password_options[ 'options' ] ) ) {
           $stmt = $bdd->prepare( 'UPDATE membres SET mot_de_passe = :new_hash WHERE id = :id' );
@@ -56,6 +78,15 @@ if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
 
     }
   }
+	
+	  if ( array_key_exists( 'idea', $_POST ) ) {
+    if ( !$errors ) {
+      $insert = $bdd->prepare( 'INSERT INTO idea( user,comment,title,date) VALUES(:user, :comment,:title,NOW())' );
+      $insert->execute( [ 'user' => strip_tags( $_SESSION[ 'id' ] ), 'comment' => strip_tags( $_POST[ 'idea' ] ),'title' => strip_tags( $_POST[ 'title' ] ) ] );
+      $fail = FALSE;
+
+    }
+  }
 
 
   if ( isset( $_FILES[ 'avatar' ] )AND!empty( $_FILES[ 'avatar' ][ 'name' ] ) ) {
@@ -72,6 +103,7 @@ if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
             'avatar' => $_SESSION[ 'id' ] . "." . $extensionUpload,
             'id' => $_SESSION[ 'id' ]
           ) );
+			 $_SESSION[ 'pdp' ] = $_SESSION[ 'id' ] . "." . $extensionUpload;
         } else {
           $msg = "Erreur durant l'importation de votre photo de profil";
         }
@@ -126,6 +158,7 @@ if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
         if ( password_verify( $_POST[ 'mdpI' ], $row[ 'mot_de_passe' ] ) ) {
           $_SESSION[ 'id' ] = $row[ 'id_membres' ];
           $_SESSION[ 'name' ] = $row[ 'prenom' ];
+			$_SESSION[ 'pdp' ] = $row[ 'pdp' ];
           $_SESSION[ 'statue' ] = true;
           $connected = true;
           if ( password_needs_rehash( $row[ 'mot_de_passe' ], $password_options[ 'algo' ], $password_options[ 'options' ] ) ) {
@@ -169,7 +202,17 @@ header( 'content-type: text/html; charset=utf-8' );
 <div class="contenaire">
   <h2 class="canCLick" id="messageBonjour">Good Morning !</h2>
   <h2 class="canCLick" id="hour">0 h 00</h2>
-  <p  class="invisible">{pseudo}</p>
+	<a class="weatherwidget-io" href="https://forecast7.com/en/46d580d34/poitiers/"  data-icons="Climacons Animated" data-mode="Current" data-days="3" data-theme="pure" ></a>
+<script>
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+</script>
+	<?php
+if ( $connected == true ) {
+  ?>
+  <p><?php echo($_SESSION['name']) ?> ! <a href="deconnexion">déconnexion</a></p>
+	<?php
+}
+  ?>
 </div>
 <?php
 if ( $connected == false ) {
@@ -214,10 +257,22 @@ if ( $connected == false ) {
 <?php
 }
 if ( $connected == true ) {
+	 if ( $_SESSION[ 'pdp' ] != null ) {
+        $pdpUrl = "img/" . $_SESSION[ 'pdp' ];
+      }else{
+		  $pdpUrl = "https://lh6.googleusercontent.com/oucxDw25YzIkYzOTExEsrO2uCob-br7Y9GhruotO_QBwMbRovgybILAB_JxNwT4UYgDosfzv08eh-Msa-IaF3GYnFF1CATfPW8Q5At31Hz5nKUNORtIX-EOkBer9E7QfSA=s412";
+	  }
   ?>
-<div class="contenaire">
-  <h3 class="canCLick">Profil</h3>
+<div class="contenaire">  
+	<h3 class="canCLick">Profil</h3>
+	<div class="profilContenaire">
+		<div style="background-image: url('<?php echo($pdpUrl); ?>')" class="profil"></div>
+<div class="text">
   <p class="canCLick">Vous êtes connecté en tant que <?php echo($_SESSION[ 'name' ]);?> </p>
+	<br>
+	<p class="canCLick">Modifier votre photo de profil ici !</p>
+		  </div>
+		</div>
 	<br>
   <form method="POST" id="connexion" enctype="multipart/form-data" class="form-style-2 invisible">
     <div class="input-file-container">
@@ -238,14 +293,19 @@ if ( $connected == true ) {
   <p class="invisible"><br>
     "Selon l’évolution du contexte sanitaire, l’autorité préfectorale compétente pourra décider de l’éventuelle fermeture d’écoles ou d’établissements scolaires pendant une durée définie en fonction de la situation. Le directeur d’école ou le chef d’établissement concerné veillera à informer, aussitôt que possible, les familles des modalités de continuité pédagogique."</p>
 </div>
-<h2>DERNIERS COMMENTAIRES :</h2>
+	
+	
+<h2>Une idée ? Un sondage ?</h2>
+	
 <div class="contenaire">
-  <?php
+	<?php
   // On récupère tout le contenu de la table jeux_video
-  $reponse = $bdd->query( 'SELECT * FROM comment  ORDER BY date DESC LIMIT 0, 5' );
+  $reponse = $bdd->query( 'SELECT * FROM idea  ORDER BY date DESC LIMIT 0, 5' );
   $count = 0;
   // On affiche chaque entrée une à une
   while ( $donnees = $reponse->fetch() ) {
+	  
+	  
     if ( $count != 0 ) {
       echo( '<hr>' );
     }
@@ -256,17 +316,95 @@ if ( $connected == true ) {
 
     // On affiche chaque entrée une à une
     while ( $donnees2 = $reponse2->fetch() ) {
+		$elCommet = $donnees['comment'];
+	if(strlen($donnees['comment']) > 15){
+		$donnees['comment'] = substr($donnees['comment'], 0, 50)." <strong>...</strong>";
+	}
+		
+
+      ?>
+  <div class="profilContenaire" onclick="window.location = 'idea.php?idIdea=<?php echo($donnees['id']) ?>'">
+    <div class="textIdea">
+      <h3><?php echo($donnees2['prenom']." ".$donnees2['nom']); ?></h3>
+      <p class="subtitle"><?php echo($donnees['date']) ?></p>
+      <p class="contenueText"><?php echo($donnees['title']) ?></p>
+		<br>
+		<p class="subtitle">Vote Carrément ! - <?php echo($donnees['yes']) ?></p>
+		<p class="subtitle">Vote Jamais ! - <?php echo($donnees['no']) ?></p>
+    </div>
+  </div>
+  <?php
+  }
+	  $reponse2->closeCursor(); // Termine le traitement de la requête
+  }
+  $reponse->closeCursor(); // Termine le traitement de la requête
+
+  ?>
+</div>
+<?php
+if ( $connected == true ) {
+  ?>
+<div class="contenaire">
+  <h3 class="canCLick">Poster une idée : </h3>
+  <form method="POST" id="connexion" class="form-style-2 ">
+    <label for="field1"><span>Titre : <span class="required">*</span></span>
+      <input type="mail" class="input-field" id="tilte" name="title" value="" />
+    </label>
+	  	  <label for="field1"><span>Description : <span class="required">*</span></span>
+			  <input type="mail" class="input-field" id="idea" name="idea" value="" />
+    <label><span> </span>
+		<br>
+      <input type="submit" value="poster !" />
+    </label>
+  </form>
+</div>
+<?php }?>
+</div>
+
+	<h2>Signaler un problème :</h2>
+	<div class="contenaire">
+    INDISPONIBLE (oui c'est un problème)
+</div>
+	
+<h2>DERNIERS COMMENTAIRES :</h2>
+<div class="contenaire" id="commentaires">
+  <?php
+  // On récupère tout le contenu de la table jeux_video
+  $reponse = $bdd->query( 'SELECT * FROM comment  ORDER BY date DESC LIMIT 0, 5' );
+  $count = 0;
+  // On affiche chaque entrée une à une
+  while ( $donnees = $reponse->fetch() ) {
+	  
+	  
+    if ( $count != 0 ) {
+      echo( '<hr>' );
+    }
+    $count++;
+
+    // On récupère tout le contenu de la table jeux_video
+    $reponse2 = $bdd->query( 'SELECT * FROM membres WHERE id_membres = "' . $donnees[ 'user' ] . '"' );
+
+    // On affiche chaque entrée une à une
+    while ( $donnees2 = $reponse2->fetch() ) {
+		$elCommet = $donnees['comment'];
+	if(strlen($donnees['comment']) > 50){
+		$donnees['comment'] = "<a onclick='fullText(this,".($count-1).")'>".substr($donnees['comment'], 0, 50)." <strong>...</strong></a>";
+	}
+		
       if ( $donnees2[ 'pdp' ] != null ) {
         $pdpUrl = "img/" . $donnees2[ 'pdp' ];
-      }
+      }else{
+		  $pdpUrl = "https://lh6.googleusercontent.com/oucxDw25YzIkYzOTExEsrO2uCob-br7Y9GhruotO_QBwMbRovgybILAB_JxNwT4UYgDosfzv08eh-Msa-IaF3GYnFF1CATfPW8Q5At31Hz5nKUNORtIX-EOkBer9E7QfSA=s412";
+	  }
 
       ?>
   <div class="profilContenaire">
+	  <p class='invisibleComment'><?php echo($elCommet)?></p>
     <div style="background-image: url('<?php echo($pdpUrl); ?>')" class="profil"></div>
     <div class="text">
       <h3><?php echo($donnees2['prenom']." ".$donnees2['nom']); ?></h3>
       <p class="subtitle"><?php echo($donnees['date']) ?></p>
-      <p><?php echo($donnees['comment']) ?></p>
+      <p class="contenueText"><?php echo($donnees['comment']) ?></p>
     </div>
   </div>
   <?php
@@ -292,19 +430,14 @@ if ( $connected == true ) {
   </form>
 </div>
 <?php }?>
+	
+	<!--
 <div class="contenaire">
   <h3 class="canCLick">Le Menu</h3>
   <p class="invisible"><br>
     INDISPONIBLE</p>
 </div>
-<div class="contenaire">
-  <h3 class="canCLick">Signaler un problème</h3>
-  <p class="invisible"><br>
-    INDISPONIBLE (oui c'est con)</p>
-</div>
-<div class="contenaire">
-  <h3 class="canCLick">Une idée ?</h3>
-</div>
+-->
 <footer>Application lycéenne</footer>
 <script  src="./script.js"></script>
 </body>
