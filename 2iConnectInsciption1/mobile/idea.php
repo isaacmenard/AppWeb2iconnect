@@ -64,6 +64,11 @@ if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
 <link rel="stylesheet" href="./style.css">
+	  <!-- Our project just needs Font Awesome Solid + Brands -->
+  <!-- Our project just needs Font Awesome Solid + Brands -->
+  <link href="./fontas/css/fontawesome.css" rel="stylesheet">
+  <link href="./fontas/css/brands.css" rel="stylesheet">
+  <link href="./fontas/css/solid.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Sen&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300&display=swap" rel="stylesheet">
 </head>
@@ -106,7 +111,8 @@ if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
 	<h2 onClick="window.location = './'">Retour</h2>
 	<br><br><br>
 	<br><br><br><br><br><br><br><br><br><br><br><br><br>
-<footer>Application lycéenne</footer>
+
+<footer>Application lycéenne <i onclick="window.location = 'https://instagram.com/2iconnect_acf?igshid=19fwtkrbcdt2y	'" class="fab fa-instagram"></i></footer>
 <script  src="./script.js"></script>
 </body>
 </html>

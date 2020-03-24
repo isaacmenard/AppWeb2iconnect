@@ -8,12 +8,11 @@ if (isset($_COOKIE['auth'])) {
     $auth = explode('---', $_COOKIE['auth']);
  
     if (count($auth) === 2) {
-        $req = $bdd->prepare('SELECT id_membres, prenom, mot_de_passe FROM membres WHERE id_membres = :id');
+        $req = $bdd->prepare('SELECT * FROM membres WHERE id_membres = :id');
         $req->execute([ ':id' => $auth[0] ]);
         $user = $req->fetch(PDO::FETCH_ASSOC);
-         
         if ($user && $auth[1] === hash('sha512', $user['prenom'].'---'.$user['mot_de_passe'])) {
-            // Ce que tu avais mis pour ta session à la connection
+			// Ce que tu avais mis pour ta session à la connection
               $_SESSION[ 'id' ] = $user[ 'id_membres' ];
 			$_SESSION[ 'name' ] = $user[ 'prenom' ];
 			$_SESSION[ 'pdp' ] = $user[ 'pdp' ];
@@ -50,7 +49,7 @@ if ( 'POST' == $_SERVER[ 'REQUEST_METHOD' ] ) {
 		 $_SESSION[ 'pdp' ] = $row[ 'pdp' ];
 		  
 		  // Donc quand c'est bon tu fais
-		$value = $row['id_membres'].'---'.hash('sha512', $row['prenom'].'---'.$_POST[ 'mdp' ]);
+		$value = $row['id_membres'].'---'.hash('sha512', $row['prenom'].'---'.$row[ 'mot_de_passe' ]);
 		setcookie('auth', $value, time() + (365 * 24 * 3600) , null, null, false, true);
         $connected = true;
         if ( password_needs_rehash( $row[ 'mot_de_passe' ], $password_options[ 'algo' ], $password_options[ 'options' ] ) ) {
@@ -192,6 +191,10 @@ header( 'content-type: text/html; charset=utf-8' );
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
 <link rel="stylesheet" href="./style.css">
+  <!-- Our project just needs Font Awesome Solid + Brands -->
+  <link href="./fontas/css/fontawesome.css" rel="stylesheet">
+  <link href="./fontas/css/brands.css" rel="stylesheet">
+  <link href="./fontas/css/solid.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Sen&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300&display=swap" rel="stylesheet">
 </head>
@@ -218,10 +221,13 @@ if ( $connected == true ) {
 if ( $connected == false ) {
   ?>
 <div class="contenaire">
-  <h3 class="canCLick">Connexion</h3>
+  <h3 class="canCLick">Connexion / Inscription :</h3>
+	<br class="invisible">
+	<h3 class="invisible canCLick">Connexion :</h3>
   <form method="POST" id="connexion" class="form-style-2 invisible">
     <label for="field1"><span>Email <span class="required">*</span></span>
-      <input type="mail" class="input-field" id="mail" name="mail" value="" />
+      <input type="mail"  pattern="{'.+@lp2i-poitiers.fr'-'.+@lp2i-poitiers.fr '} "
+          title="Merci de fournir uniquement une adresse Lp2i" class="input-field" id="mail" name="mail" value="" />
     </label>
     <label for="field2"><span>Mot de passe <span class="required">*</span></span>
       <input type="password" class="input-field" id="mdp" name="mdp" value="" />
@@ -230,12 +236,11 @@ if ( $connected == false ) {
       <input type="submit" value="Connexion" />
     </label>
   </form>
-</div>
-<div class="contenaire">
-  <h3 class="canCLick">Inscription</h3>
+	<h3 class="invisible canCLick">Inscription :</h3>
   <form method="POST" id="inscription" class="form-style-2 invisible">
     <label for="field1"><span>Email <span class="required">*</span></span>
-      <input name="mailI" type="mail" class="input-field"  value="" />
+      <input    pattern="{'.+@lp2i-poitiers.fr'-'.+@lp2i-poitiers.fr '} "
+          title="Merci de fournir uniquement une adresse Lp2i" name="mailI" type="mail" class="input-field"  value="" />
     </label>
     <label for="field1"><span>Nom <span class="required">*</span></span>
       <input name="nomI" type="text" class="input-field"  value="" />
@@ -264,7 +269,7 @@ if ( $connected == true ) {
 	  }
   ?>
 <div class="contenaire">  
-	<h3 class="canCLick">Profil</h3>
+	<h3class="canCLick">Profil</h3>
 	<div class="profilContenaire">
 		<div style="background-image: url('<?php echo($pdpUrl); ?>')" class="profil"></div>
 <div class="text">
@@ -367,13 +372,23 @@ if ( $connected == true ) {
 </div>
 	
 <h2>DERNIERS COMMENTAIRES :</h2>
-<div class="contenaire" id="commentaires">
+	<div class="contenaire">
   <?php
   // On récupère tout le contenu de la table jeux_video
   $reponse = $bdd->query( 'SELECT * FROM comment  ORDER BY date DESC LIMIT 0, 5' );
   $count = 0;
+
+	
   // On affiche chaque entrée une à une
   while ( $donnees = $reponse->fetch() ) {
+	  	$countCOmment = 0;
+	  $reponse2 = $bdd->query( 'SELECT * FROM commentresponse WHERE idResponse = "' . $donnees[ 'id' ] . '"' );
+
+    // On affiche chaque entrée une à une
+    while ( $donnees2 = $reponse2->fetch() ) {
+		$countCOmment++;
+	}
+	 $reponse2->closeCursor(); // Termine le traitement de la requête
 	  
 	  
     if ( $count != 0 ) {
@@ -387,9 +402,7 @@ if ( $connected == true ) {
     // On affiche chaque entrée une à une
     while ( $donnees2 = $reponse2->fetch() ) {
 		$elCommet = $donnees['comment'];
-	if(strlen($donnees['comment']) > 50){
-		$donnees['comment'] = "<a onclick='fullText(this,".($count-1).")'>".substr($donnees['comment'], 0, 50)." <strong>...</strong></a>";
-	}
+		$donnees['comment'] = "<a onclick='window.location = `comment.php?idComment=".$donnees['id']."`'>".substr($donnees['comment'], 0, 50)." <strong>...</strong></a>";
 		
       if ( $donnees2[ 'pdp' ] != null ) {
         $pdpUrl = "img/" . $donnees2[ 'pdp' ];
@@ -398,12 +411,13 @@ if ( $connected == true ) {
 	  }
 
       ?>
-  <div class="profilContenaire">
-	  <p class='invisibleComment'><?php echo($elCommet)?></p>
+  <div class="profilContenaire commentaireLong">
     <div style="background-image: url('<?php echo($pdpUrl); ?>')" class="profil"></div>
     <div class="text">
       <h3><?php echo($donnees2['prenom']." ".$donnees2['nom']); ?></h3>
       <p class="subtitle"><?php echo($donnees['date']) ?></p>
+		<p class="subtitle">Réponses : <?php echo($countCOmment++) ?></p>
+		<br>
       <p class="contenueText"><?php echo($donnees['comment']) ?></p>
     </div>
   </div>
@@ -438,7 +452,7 @@ if ( $connected == true ) {
     INDISPONIBLE</p>
 </div>
 -->
-<footer>Application lycéenne</footer>
+<footer>Application lycéenne <i onclick="window.location = 'https://instagram.com/2iconnect_acf?igshid=19fwtkrbcdt2y	'" class="fab fa-instagram"></i></footer>
 <script  src="./script.js"></script>
 </body>
 </html>

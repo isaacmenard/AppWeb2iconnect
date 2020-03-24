@@ -57,40 +57,5 @@ fileInput.addEventListener( "change", function( event ) {
     the_return.innerHTML = this.value;  
 });  }
 
-var listText= []
-for(var i =0; i < document.getElementsByClassName("invisibleComment").length;i++){
-	listText.push(document.getElementsByClassName("invisibleComment")[i].innerHTML)
-}
-
-
-
-function fullText(element,id){
-		var count = []
-	for(var i = 0; i < document.getElementById("commentaires").getElementsByClassName("profilContenaire").length;i++){
-		count.push(document.getElementById("commentaires").getElementsByClassName("profilContenaire")[i])
-	}
-	var alerte = (element.parentNode.parentNode.parentNode)
-	var contenaire = document.createElement("div")
-	contenaire.className = "popUp"
-	var contenaire2 = document.createElement("div")
-	contenaire2.className = "popUpChild"
-	contenaire2.appendChild(alerte)
-	contenaire.appendChild(contenaire2)
-	document.body.appendChild(contenaire)
-	var ancienTexte = alerte.getElementsByClassName("text")[0].getElementsByClassName("contenueText")[0].innerHTML
-	alerte.getElementsByClassName("text")[0].getElementsByClassName("contenueText")[0].innerHTML = listText[id]
-	
-	contenaire.addEventListener('click', function (ev) {
-	  if(ev.target == contenaire ){
-
-		  alerte.getElementsByClassName("text")[0].getElementsByClassName("contenueText")[0].innerHTML = ancienTexte
-		  document.getElementById("commentaires").innerHTML = ""
-		  for(var i = 0; i < count.length;i++){
-			  	document.getElementById("commentaires").appendChild(count[i])
-		  }
-		  document.body.removeChild(contenaire)
-	  }
-	})
-}
 
 
